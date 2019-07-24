@@ -20,6 +20,7 @@ The source code for this guide is hosted in [this GitHub repository](https://git
 
 ## Building
 
+This tutorial works fine with the
 ### Build the docker image
 
 1. Set up docker and gcloud as described in the "Before you begin" section of the [GCP Container Registry Quickstart](https://cloud.google.com/container-registry/docs/quickstart "Container Registry Quickstart Documentation").
@@ -43,6 +44,6 @@ The source code for this guide is hosted in [this GitHub repository](https://git
 1. The `modules` section does not work yet.
 1. Networking problems tend to leave the Google Cloud Shell in an odd state, sometimes requiring the user to start over from scratch.
 1. There are some issues with using the `google_project_services` resource, specifically:
-  1. if `oslogin.googleapis.com` isn't included, it gets silently enabled; and shows up as "removed" in subsequent runs.
-  1. If it is included, things work fine until you run `terraform destroy`:
+    1. if `oslogin.googleapis.com` isn't included, it gets silently enabled; and shows up as "removed" in subsequent runs.
+    1. If it is included, things work fine until you run `terraform destroy`:
     Error: Unable to destroy google_project_services for sturdy-mechanic-247714: Error disabling service "oslogin.googleapis.com" for project "sturdy-mechanic-247714": Error waiting for api to disable: Error code 9, message: [Could not turn off service, as it still has resource s in use.] with failed services [compute.googleapis.com]
