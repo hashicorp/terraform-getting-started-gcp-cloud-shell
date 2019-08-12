@@ -20,10 +20,11 @@ The source code for this guide is hosted in [this GitHub repository](https://git
 
 ## Building
 
-This tutorial works fine with the
+This tutorial works fine with the image used above. However, the version of Terraform included in that image may not be the latest version. You can build a Docker image with the latest version instead if you prefer.
+
 ### Build the docker image
 
-1. Set up docker and gcloud as described in the "Before you begin" section of the [GCP Container Registry Quickstart](https://cloud.google.com/container-registry/docs/quickstart "Container Registry Quickstart Documentation").
+1. Set up docker and the gcloud command line utility as described in the "Before you begin" section of the [GCP Container Registry Quickstart](https://cloud.google.com/container-registry/docs/quickstart "Container Registry Quickstart Documentation").
 1. Run: `docker build . -t terraform-gcp-gsg:v$(date "+%Y-%m-%d")`
 1. Optionally, inspect/test image - for example:
   `docker run -it --entrypoint /bin/sh terraform-gcp-gsg:v$(date "+%Y-%m-%d")`
@@ -41,7 +42,6 @@ This tutorial works fine with the
 
 ## Known Issues
 
-1. The `modules` section does not work yet.
 1. Networking problems tend to leave the Google Cloud Shell in an odd state, sometimes requiring the user to start over from scratch.
 1. There are some issues with using the `google_project_services` resource, specifically:
     1. if `oslogin.googleapis.com` isn't included, it gets silently enabled; and shows up as "removed" in subsequent runs.
