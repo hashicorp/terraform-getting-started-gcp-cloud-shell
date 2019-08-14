@@ -19,7 +19,7 @@ building blocks for more complex configurations.
 
 This guide uses Google Cloud Shell to give you an environment preconfigured with Terraform. You can run commands at the command prompt, and edit the files in the editor window.
 
-If you'd prefer to follow this tutorial on your local machine, you can follow this [guide on learn.hashicorp.com](https://learn.hashicorp.com/terraform/gcp/intro).
+If you'd prefer to follow this tutorial on your local machine, you can follow [this guide on learn.hashicorp.com](https://learn.hashicorp.com/terraform/gcp/intro).
 
 ## Installing Terraform
 
@@ -52,21 +52,20 @@ While everything provisioned in this guide should fall within GCP's free tier, i
 
 ### Setting up GCP
 
-In addition to a GCP account, you'll need two things to use Terraform to provision your infrastructure:
+In addition to a GCP account, you'll need to create a **GCP Project** to follow
+this guide. You can [create one](https://console.cloud.google.com/projectcreate)
+in the GCP console. You'll need the *Project ID* later. You can see a list of
+your projects in the [cloud resource
+manager](https://console.cloud.google.com/cloud-resource-manager). It may take a
+few minutes for the project to be created.
 
-- **A GCP Project**: GCP organizes resources into projects. You can [create
-  one](https://console.cloud.google.com/projectcreate) in the GCP console.
-  You'll need the *Project ID* later. You can see a list of your projects in the
-  [cloud resource
-  manager](https://console.cloud.google.com/cloud-resource-manager).
+#### Authentication
 
-- **Google Compute Engine**: You'll need to enable Google Compute Engine for
-  your project. You can do so [in the
-  console](https://console.developers.google.com/apis/library/compute.googleapis.com).
-  Make sure the project you're using to follow this guide is selected and click
-  the "Enable" button.
-
-- **Authentication.** When we're using Google Cloud Shell, the shell is already configured to authenticate with your GCP account. When using Terraform from another environment, you'll need to configure authentication. You can [read about credentials here](https://www.terraform.io/docs/providers/google/provider_reference.html#credentials).
+When we're using Google Cloud Shell, the shell is already configured with access
+to your GCP account, so you won't need to do anything extra to authenticate and
+start provisioning resources. When using Terraform from another environment,
+you'll need to configure authentication. You can [read about credentials
+here](https://www.terraform.io/docs/providers/google/provider_reference.html#credentials).
 
 ## Terraform Configuration
 
@@ -102,31 +101,6 @@ The `provider` block is used to configure the named provider, in
 our case `google`. A provider is responsible for creating and
 managing resources. Multiple provider blocks can exist if a
 Terraform configuration manages resources from different providers.
-
-The `resource` block defines a resource that exists within the infrastructure. A
-resource might be a physical component such as a server, or it can be a logical
-resource such as a Heroku application. In this example, we're creating a network
-for the resources we'll created later in this tutorial.
-
-The resource block has two strings before opening the block: the resource type
-and the resource name. In our example, the resource type is
-"google_compute_network" and the name is "vpc_network." The prefix of the type
-maps to the provider. In our case "google_compute_network" automatically tells
-Terraform that it is managed by the "google" provider. The resource type and
-name together form the resource ID, in this case
-"google_compute_network.vpc_network". The resource can be referenced by this ID
-in other parts of your configuration.
-
-Within the resource block itself is configuration for that resource. This is
-dependent on each resource provider and is fully documented within our
-[providers reference](https://www.terraform.io/docs/providers/index.html).
-
-The [GCP provider](https://www.terraform.io/docs/providers/google/index.html)
-documents supported resources resources, including
-[google_compute_network](https://www.terraform.io/docs/providers/google/r/compute_network.html).
-
-There are a number of optional arguments, but for our network, we just specify
-the name, which will be how the network is identified in GCP.
 
 ### Initialization
 
@@ -183,13 +157,17 @@ your working directory to use the provider configuration you supplied. Before we
 
 ### Enabling Services
 
-We'll use a few different Google Cloud services in this guide. We need to enable them before we can use them. To do so, we'll also introduce our first resource. You can learn more about how this resource works from [the documentation](https://www.terraform.io/docs/providers/google/r/google_project_services.html).
+In this guide, we'll be using the Google Compute Engine, and we'll also need to
+enable the "OS Login" service for authentication. We need to enable these
+services before we can use them. To do so, we'll also introduce our first
+_resource_. You can learn more about how this resource works from [the
+documentation](https://www.terraform.io/docs/providers/google/r/google_project_services.html).
 
 Add the following to your main.tf file:
 
 ```hcl
 resource "google_project_services" "project_services" {
-  project  = "YOUR-PROJECT-ID"
+  project  = "<PROJECT_ID>"
   services = ["compute.googleapis.com", "oslogin.googleapis.com"]
 }
 ```
@@ -199,11 +177,7 @@ A resource might be a physical or virtual component such as a server, or a
 logical resource such as a Google App Engine application, or configuration,
 which is what this one is. It will enable the listed services for your project.
 
-To apply your changes, run:
-
-```sh
-$ terraform apply
-```
+To apply your changes, run `terraform apply`.
 
 You should see output like this:
 ```raw
@@ -250,7 +224,8 @@ You may also have noticed that we have to repeat the project ID. Don't worry, we
 
 ## Provisioning Resources
 
-Now we'll create our first "real" resource: A Virtual Private Network. Add the following to your `main.tf` file:
+Now we'll create our first "real" resource: A Virtual Private Cloud network. Add
+the following to your `main.tf` file:
 
 ```hcl
 resource "google_compute_network" "vpc_network" {
@@ -319,9 +294,6 @@ dangerous, it is safe to abort here with no changes made to your infrastructure.
 In this case the plan looks acceptable, so type `yes` at the confirmation prompt
 to proceed.
 
-If `terraform apply` failed with an error, read the error message and fix the
-error that occurred.
-
 Executing the plan will take a few minutes since Terraform waits for the network
 to be created successfully:
 
@@ -341,8 +313,8 @@ Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 ```
 
 After this, Terraform is all done! You can go to the GCP console to see the
-created network. Make sure you're looking at the same region and project that
-was configured in the provider configuration.
+network you created. Make sure you're looking at the same region and project
+that was configured in the provider configuration.
 
 If you look in your current working directory, you'll see that Terraform also
 wrote some data into the `terraform.tfstate` file. This state file is extremely
@@ -386,9 +358,9 @@ resources or outputs, which will be covered later in this guide.
 
 ## Changing Infrastructure
 
-In the previous page, you created your first infrastructure with Terraform: a
-VPC network. In this page, we're going to modify your configuration, and see how
-Terraform handles change.
+In the previous section, you created your first infrastructure with Terraform: a
+VPC network. In this section, we're going to modify your configuration, and see
+how Terraform handles change.
 
 Infrastructure is continuously evolving, and Terraform was built to help manage
 and enact that change. As you change Terraform configurations, Terraform builds
@@ -396,7 +368,7 @@ an execution plan that only modifies what is necessary to reach your desired
 state.
 
 By using Terraform to change infrastructure, you can version control not only
-your configurations but also your state so you can see how the infrastructure
+your configurations but also your state, so you can see how the infrastructure
 evolves over time.
 
 ### Adding Resources
@@ -849,6 +821,17 @@ Do you want to perform these actions?
 Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
 ```
 
+It's possible you might see an error like this one:
+
+```raw
+Error: Error authoritatively enabling Project PROJECT_ID Services: unable to enable Project Services PROJECT_ID ([oslogin.googl
+eapis.com compute.googleapis.com]): Batch "project/PROJECT_ID/services:batchEnable" for request "Enable Project Services PROJECT_ID: [oslogin.googleapis.com compute.googleapis.com]" returned error: Error waiting for Enable Project "PROJECT_ID" Services: [oslo
+gin.googleapis.com compute.googleapis.com]: Error code 9, message: [The service is currently being deactivated and deactivation must comp
+lete before activation can occur.] with failed services [compute.googleapis.com]
+```
+
+As the error says, in this case it took a few minutes for the service to be disabled, and the GCP API won't allow us to activate it while this is still going on. If this happens to you, you'll need to wait a few minutes and re-run `terraform apply`.
+
 ### Assigning an Elastic IP
 
 Now we'll improve your configuration by assigning a static IP to the VM instance
@@ -1039,60 +1022,20 @@ Sometimes there are dependencies between resources that are _not_ visible to
 Terraform. The `depends_on` argument is accepted by any resource and accepts
 a list of resources to create _explicit dependencies_ for.
 
-For example, perhaps an application we will run on our instance expects to use a
-specific Cloud Storage bucket, but that dependency is configured inside the
-application code and thus not visible to Terraform. In that case, we can use
-`depends_on` to explicitly declare the dependency:
+For example, when we created the vpc_network, we added an explicit dependency on the project services we enabled:
 
-```hcl
-# New resource for the storage bucket our application will use.
-resource "google_storage_bucket" "example_bucket" {
-  name     = "terraform-example-bucket-<YOURNAME>-<TODAY>"
-  location = "US"
-
-  website {
-    main_page_suffix = "index.html"
-    not_found_page   = "404.html"
-  }
-}
-
-# Create a new instance that uses the bucket
-resource "google_compute_instance" "another_instance" {
-  # Tells Terraform that this VM instance must be created only after the
-  # storage bucket has been created.
-  depends_on = [google_storage_bucket.example_bucket]
-
-  name         = "terraform-instance-2"
-  machine_type = "f1-micro"
-
-  boot_disk {
-    initialize_params {
-      image = "cos-cloud/cos-stable"
-    }
-  }
-
-  network_interface {
-    network = google_compute_network.vpc_network.self_link
-    access_config {
-    }
-  }
+```
+resource "google_compute_network" "vpc_network" {
+  name = "terraform-network"
+  depends_on = [google_project_services.project_services]  
 }
 ```
 
-Google storage buckets must have unique names, so be sure to replace
-`<YOURNAME>` and `<TODAY>` in the `name` property of your bucket to make a
-(probably) unique name.
-
-You may wonder where in your configuration these resources should go. The order
-that resources are defined in a terraform configuration file has no effect on
-how Terraform applies your changes. Organize your configuration files in a way
-that makes the most sense for you and your team.
-
-Now run `terraform plan` and `terraform apply` to see these changes in action.
-
-Before moving on, you can remove these new resources from your configuration and
-run `terraform apply` once again to destroy them. We won't use the bucket or the
-second instance any further in the getting started guide.
+This dependency ensures that the network will be created only after the project
+services are enabled, and that the project services won't be disabled until
+after the network is destroyed. There isn't an implicit dependency on these two
+resources, since there's no direct connection in the GCP API between the network
+on the services we enabled.
 
 ## Provisioning
 
@@ -1167,13 +1110,13 @@ Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
 ```
 
 Terraform found nothing to do - and if you check, you'll find that there's no
-`ip_address.txt` file on your local machine.
+`ip_address.txt` file on the cloud shell filesystem.
 
 Terraform treats provisioners differently from other properties. Provisioners
 only run when a resource is created, but adding a provisioner does not force
 that resource to be destroyed and recreated. If this is what we want, we can use
-`terraform taint` to tell Terraform to recreate the instance. Run this command
-now:
+`terraform taint` to tell Terraform to recreate the instance. Run the command
+`terraform taint google_compute_instance.vm_instance` now:
 
 ```raw
 $ terraform taint google_compute_instance.vm_instance
@@ -1255,7 +1198,7 @@ introduces input variables as a way to do this.
 
 Let's first extract a few of the hardcoded values into variables.
 
-Create another file called `variables.tf` with the following contents:
+Edit the file called `variables.tf` to add the following contents:
 
 ```hcl
 variable "project" { }
@@ -1269,26 +1212,24 @@ variable "zone" {
 }
 ```
 
-=> **Note**: Terraform loads all files ending in `.tf` in a directory, so it
-doesn't matter to terraform where your variables are defined. We recommend
-defining them in their own file to make your configuration easier to organize
-and understand.
+#### Note
+
+Terraform loads all files ending in `.tf` in a directory, so it doesn't matter
+to terraform where your variables are defined. We recommend defining them in
+their own file to make your configuration easier to organize and understand.
 
 This defines three variables within your Terraform configuration. The first one
 has an empty block: `{ }`. The other two set defaults. If a default value is
 set, the variable is optional. Otherwise, the variable is required. If you run
-`terraform plan` now, Terraform will prompt you for the values for unset string
-variables.
+`terraform plan` now, Terraform will prompt you for the value of the _region_
+variable.
 
 ### Using Variables in Configuration
 
-Next, update the GCP provider configuration with the following, leaving the
-`credentials` parameter unchanged:
+Next, update the GCP provider configuration in `main.tf` with the following:
 
 ```hcl
 provider "google" {
-  credentials = file("<NAME>.json")
-
   project = var.project
   region  = var.region
   zone    = var.zone
@@ -1309,6 +1250,7 @@ command in Terraform that inspects the configuration accepts this flag, such as
 
 ```raw
 $ terraform plan -var 'project=<PROJECT_ID>'
+
 ...
 ```
 
@@ -1318,14 +1260,14 @@ this way every time you run terraform.
 #### From a file
 
 To persist variable values, create a file and assign variables within
-this file. Create a new file named `terraform.tfvars` with the following
+this file. Edit the file named `terraform.tfvars` with the following
 contents:
 
 ```hcl
 project = "<PROJECT_ID>"
 ```
 
-~> **Note**: Be sure to replace `<PROJECT_ID>` with your project's ID.
+Be sure to replace `<PROJECT_ID>` with your project's ID.
 
 Terraform automatically loads all files which match `terraform.tfvars` or
 `*.auto.tfvars` present in the current directory to populate variables. You can
@@ -1353,7 +1295,7 @@ Terraform will read environment variables in the form of `TF_VAR_name`
 to find the value for a variable. For example, the `TF_VAR_region`
 environment variable can be set to set the `region` terraform variable.
 
--> **Note**: Environment variables can only populate string-type variables.
+**Note**: Environment variables can only populate string-type variables.
 List and map type variables must be populated via one of the other mechanisms.
 
 #### UI Input
@@ -1400,7 +1342,8 @@ defining the number type is more about ensure the correct type of input is used.
 
 ```hcl
 variable "web_instance_count" {
-  type = number
+  type    = number
+  default = 1
 }
 ```
 
@@ -1478,14 +1421,14 @@ example: `var.machine_types["dev"]`.
 We set defaults above, but maps can also be set using the `-var` and
 `-var-file` values. For example:
 
-```shell
+```raw
 $ terraform apply -var 'machine_types={ "dev" = "f1-micro", test = "n1-standard-16", prod = "n1-standard-16" }'
 # ...
 ```
 
-- **Note**: Even if every key will be assigned as input, the variable must be
-  established as a map in your configuration by setting its type to `map` or its
-  default to `{}`.
+**Note**: Even if every key will be assigned as input, the variable must be
+established as a map in your configuration by setting its type to `map` or its
+default to `{}`.
 
 Here is an example of setting a map's keys from a `.tfvars` file. Starting with these
 variable definitions:
@@ -1527,8 +1470,8 @@ output` command.
 
 ### Defining Outputs
 
-Let's define an output to show us the static IP address that we created. Create
-a file called `outputs.tf` with the following contents:
+Let's define an output to show us the static IP address that we created. Edit
+the file called `outputs.tf` with the following contents:
 
 ```hcl
 output "ip" {
@@ -1536,9 +1479,7 @@ output "ip" {
 }
 ```
 
-#### Note
-
-Just like `variables.tf`, this configuration could go in your `main.tf` file.
+**Note**: Just like `variables.tf`, this configuration could go in your `main.tf` file.
 We're putting it in a separate file just to keep things organized.
 
 ### Output Names
@@ -1576,7 +1517,6 @@ $ terraform output ip
 
 This command is useful for scripts to extract outputs from your configuration.
 
-
 ## Modules
 
 Up to this point, we've been configuring Terraform by editing Terraform
@@ -1608,6 +1548,7 @@ Add the following to your `main.tf` file:
 module "network" {
   source  = "terraform-google-modules/network/google"
   version = "1.1.0"
+  depends_on = [google_project_services.project_services]
 
   network_name = "terraform-vpc-network"
   project_id   = var.project
@@ -2120,7 +2061,7 @@ created for this lab, to avoid being charged for it in the future. Do so by
 running `terraform destroy`:
 
 ```raw
-$ ./terraform destroy
+$ terraform destroy
 module.network.google_compute_network.network: Refreshing state... [id=terraform-vpc-network]
 google_compute_address.vm_static_ip: Refreshing state... [id=capable-stream-249119/us-central1/terraform-static-ip]
 module.network.google_compute_subnetwork.subnetwork[1]: Refreshing state... [id=us-central1/subnet-02]
