@@ -25,7 +25,7 @@ If you'd prefer to follow this tutorial on your local machine, you can follow [t
 
 Terraform is already install in your Cloud Shell environment. You can verify this by running:
 
-```shell
+```bash
 terraform --version
 ```
 
@@ -52,18 +52,16 @@ While everything provisioned in this guide should fall within GCP's free tier, i
 
 ### Setting up GCP
 
-In addition to a GCP account, you'll need to create a **GCP Project** to follow
-this guide. You can [create one](https://console.cloud.google.com/projectcreate)
-in the GCP console. You'll need the *Project ID* later. You can see a list of
-your projects in the [cloud resource
-manager](https://console.cloud.google.com/cloud-resource-manager). It may take a
-few minutes for the project to be created.
+Create or select the project you'd like to use throughout this tutorial below.
+
+<walkthrough-project-billing-setup></walkthrough-project-billing-setup>
+
 
 #### Authentication
 
 When we're using Google Cloud Shell, the shell is already configured with access
-to your GCP account, so you won't need to do anything extra to authenticate and
-start provisioning resources. When using Terraform from another environment,
+to your GCP credentials, so you won't need to do anything extra to authenticate
+and start provisioning resources. When using Terraform from another environment,
 you'll need to configure authentication. You can [read about credentials
 here](https://www.terraform.io/docs/providers/google/provider_reference.html#credentials).
 
@@ -111,9 +109,11 @@ commands.
 
 Run the command `terraform init` in the same directory as your main.tf file now:
 
-```raw
+```bash
 $ terraform init
+```
 
+```raw
 Initializing the backend...
 
 Initializing provider plugins...
@@ -167,7 +167,7 @@ Add the following to your main.tf file:
 
 ```hcl
 resource "google_project_services" "project_services" {
-  project  = "<PROJECT_ID>"
+  project  = "{{project-id}}"
   services = ["compute.googleapis.com", "oslogin.googleapis.com"]
 }
 ```
