@@ -25,7 +25,7 @@ If you'd prefer to follow this tutorial on your local machine, you can follow [t
 
 Terraform is already install in your Cloud Shell environment. You can verify this by running:
 
-```shell
+```bash
 terraform --version
 ```
 
@@ -53,11 +53,17 @@ While everything provisioned in this guide should fall within GCP's free tier, i
 ### Setting up GCP
 
 In addition to a GCP account, you'll need to create a **GCP Project** to follow
-this guide. You can [create one](https://console.cloud.google.com/projectcreate)
-in the GCP console. You'll need the *Project ID* later. You can see a list of
-your projects in the [cloud resource
-manager](https://console.cloud.google.com/cloud-resource-manager). It may take a
-few minutes for the project to be created.
+this guide.
+
+Create or select the project you'd like to use throughout this guide below.
+
+<walkthrough-project-billing-setup></walkthrough-project-billing-setup>
+
+You can set the project id to use for the rest of this guide with the following command:
+
+```
+export GOOGLE_CLOUD_PROJECT={{project-id}}
+```
 
 #### Authentication
 
@@ -85,17 +91,20 @@ When run, Terraform will load all configuration files from the current directory
 
 Inside of it there should be a file named `main.tf`. Terraform recognizes files ending in `.tf` or `.tf.json` as configuration files and will load them when it runs.
 
+{{editor-open-file filePath="tutorial/main.tf"}}
+
 First, we'll configure the provider. Add the following to `main.tf`:
 
 ```hcl
 provider "google" {
-  project = "<PROJECT_ID>"
+  project = "{{project-id}}"
   region  = "us-central1"
   zone    = "us-central1-c"
 }
 ```
 
-You'll need to replace the project with the project id of the project you created earlier. Remember you can see a list of your projects in the [cloud resource manager](https://console.cloud.google.com/cloud-resource-manager)
+Remember you can see a list of your projects in the [cloud resource
+manager](https://console.cloud.google.com/cloud-resource-manager)
 
 The `provider` block is used to configure the named provider, in
 our case `google`. A provider is responsible for creating and
@@ -111,9 +120,11 @@ commands.
 
 Run the command `terraform init` in the same directory as your main.tf file now:
 
-```raw
-$ terraform init
+```bash
+terraform init
+```
 
+```
 Initializing the backend...
 
 Initializing provider plugins...
@@ -167,7 +178,7 @@ Add the following to your main.tf file:
 
 ```hcl
 resource "google_project_services" "project_services" {
-  project  = "<PROJECT_ID>"
+  project  = "{{project-id}}"
   services = ["compute.googleapis.com", "oslogin.googleapis.com"]
 }
 ```
@@ -179,9 +190,13 @@ which is what this one is. It will enable the listed services for your project.
 
 To apply your changes, run `terraform apply`.
 
+```bash
+terraform apply
+```
+
 You should see output like this:
+
 ```raw
-$ terraform apply
 An execution plan has been generated and is shown below.
 Resource actions are indicated with the following symbols:
   + create
@@ -328,8 +343,11 @@ state with your teams. You'll see how to do so later on in this guide.
 
 You can inspect the current state by running `terraform show`:
 
+```bash
+terraform show
+```
+
 ```raw
-$ terraform show
 # google_compute_network.vpc_network:
 resource "google_compute_network" "vpc_network" {
     auto_create_subnetworks         = true
@@ -410,8 +428,11 @@ that the instance will be accessible over the internet.
 
 We can now apply that change:
 
+```bash
+terraform apply
+```
+
 ```raw
-$ terraform apply
 google_compute_network.vpc_network: Refreshing state... [id=terraform-network]
 
 An execution plan has been generated and is shown below.
@@ -518,8 +539,11 @@ resource "google_compute_instance" "vm_instance" {
 
 Run `terraform apply` again. You should see output like this:
 
+```bash
+terraform apply
+```
+
 ```raw
-$ terraform apply
 google_compute_network.vpc_network: Refreshing state... [id=terraform-network]
 google_compute_instance.vm_instance: Refreshing state... [id=terraform-instance]
 
@@ -570,8 +594,11 @@ We've changed the boot disk from being a Debian 9 image to use Google's
 Container-Optimized OS. After editing the configuration, run `terraform apply`
 again to see how Terraform will apply this change to the existing resources.
 
+```bash
+terraform apply
+```
+
 ```raw
-$ terraform apply
 google_compute_network.vpc_network: Refreshing state... [id=terraform-network]
 google_compute_instance.vm_instance: Refreshing state... [id=terraform-instance]
 
@@ -703,8 +730,11 @@ Resources can be destroyed using the `terraform destroy` command, which is
 similar to `terraform apply` but it behaves as if all of the resources have been
 removed from the configuration.
 
+```bash
+terraform destroy
+```
+
 ```raw
-$ terraform destroy
 google_compute_network.vpc_network: Refreshing state... [id=terraform-network]
 google_compute_instance.vm_instance: Refreshing state... [id=terraform-instance]
 
@@ -789,16 +819,17 @@ resources.
 If you've been following this guide, you destroyed your resources in the last
 step, and so `terraform show` will show no resources:
 
-```raw
-$ terraform show
-
+```bash
+terraform show
 ```
 
 Go ahead and recreate your network and instance by running `terraform apply`:
 
-```raw
-$ terraform apply
+```bash
+terraform apply
+```
 
+```raw
 An execution plan has been generated and is shown below.
 Resource actions are indicated with the following symbols:
   + create
@@ -851,8 +882,11 @@ your project.
 
 You can see what will be created with `terraform plan`:
 
+```bash
+terraform plan
+```
+
 ```raw
-$ terraform plan
 Refreshing Terraform state in-memory prior to plan...
 The refreshed state will be used to calculate this plan, but will not be
 persisted to local or remote state storage.
@@ -921,8 +955,11 @@ the static IP address. When Terraform reads this configuration, it will:
 
 We'll run `terraform plan` again, but this time, let's save the plan:
 
+```bash
+terraform plan -out static_ip
+```
+
 ```raw
-$ terraform plan -out static_ip
 Refreshing Terraform state in-memory prior to plan...
 The refreshed state will be used to calculate this plan, but will not be
 persisted to local or remote state storage.
@@ -978,8 +1015,11 @@ In this case, we can see that Terraform will create a new
 Run `terraform apply "static_ip"` to see how Terraform plans to apply this change.
 The output will look similar to the following:
 
+```bash
+terraform apply "static_ip"
+```
+
 ```raw
-$ terraform apply "static_ip"
 google_compute_address.vm_static_ip: Creating...
 google_compute_address.vm_static_ip: Creation complete after 5s [id=hc-training-test/us-central1/terraform-static-ip]
 google_compute_instance.vm_instance: Modifying... [id=terraform-instance]
@@ -1024,7 +1064,7 @@ a list of resources to create _explicit dependencies_ for.
 
 For example, when we created the vpc_network, we added an explicit dependency on the project services we enabled:
 
-```
+```hcl
 resource "google_compute_network" "vpc_network" {
   name = "terraform-network"
   depends_on = [google_project_services.project_services]  
@@ -1098,8 +1138,11 @@ blocks as well, so once again we specify the first one.
 The results of running `terraform apply` at this point may be confusing at
 first:
 
+```bash
+terraform apply
+```
+
 ```raw
-$ terraform apply
 google_compute_network.vpc_network: Refreshing state... [id=terraform-network]
 google_compute_address.vm_static_ip: Refreshing state... [id=hc-training-test/us-central1/terraform-static-ip]
 google_storage_bucket.example_bucket: Refreshing state... [id=example-bucket-robin-jul-9-2019]
@@ -1118,16 +1161,22 @@ that resource to be destroyed and recreated. If this is what we want, we can use
 `terraform taint` to tell Terraform to recreate the instance. Run the command
 `terraform taint google_compute_instance.vm_instance` now:
 
+```bash
+terraform taint google_compute_instance.vm_instance
+```
+
 ```raw
-$ terraform taint google_compute_instance.vm_instance
 Resource instance google_compute_instance.vm_instance has been marked as tainted.
 ```
 
 A _tainted_ resource will be destroyed and recreated during the next _apply_.
 Run `terraform apply` now:
 
+```bash
+terraform apply
+```
+
 ```raw
-$ terraform apply
 # ...
 
 Terraform will perform the following actions:
@@ -1156,8 +1205,11 @@ Apply complete! Resources: 1 added, 0 changed, 1 destroyed.
 
 You can verify everything worked by looking at the `ip_address.txt` file:
 
+```bash
+cat ip_address.txt
+```
+
 ```raw
-$ cat ip_address.txt
 terraform-instance: 35.194.46.141
 ```
 
@@ -1198,7 +1250,9 @@ introduces input variables as a way to do this.
 
 Let's first extract a few of the hardcoded values into variables.
 
-Edit the file called `variables.tf` to add the following contents:
+Edit the file called `variables.tf` to add the following contents.
+
+{{editor-open-file filePath="tutorial/variables.tf"}}
 
 ```hcl
 variable "project" { }
@@ -1248,10 +1302,8 @@ You can set variables directly on the command-line with the `-var` flag. Any
 command in Terraform that inspects the configuration accepts this flag, such as
 `apply`, `plan`, and `refresh`:
 
-```raw
-$ terraform plan -var 'project=<PROJECT_ID>'
-
-...
+```bash
+terraform plan -var 'project={{project-id}}'
 ```
 
 Setting variables this way will not save them, and they'll have to be passed
@@ -1261,13 +1313,14 @@ this way every time you run terraform.
 
 To persist variable values, create a file and assign variables within
 this file. Edit the file named `terraform.tfvars` with the following
-contents:
+contents.
+
+{{editor-open-file filePath="tutorial/terraform.tfvars"}}
+
 
 ```hcl
-project = "<PROJECT_ID>"
+project = "{{project-id}}"
 ```
-
-Be sure to replace `<PROJECT_ID>` with your project's ID.
 
 Terraform automatically loads all files which match `terraform.tfvars` or
 `*.auto.tfvars` present in the current directory to populate variables. You can
@@ -1275,16 +1328,16 @@ also specify a file to load with the `-var-file` commandline argument.
 
 These files are the same syntax as Terraform configuration files.
 
-For security reasons, we recommend never saving usernames and passwords to
-version control. Your terraform configuration will probably need these secret
-values, though. One solution is to create a local secret variables file and use
-`-var-file` to load it.
+For security reasons, we recommend never saving usernames, passwords, and secret
+keys to version control. Your terraform configuration will probably need these
+secret values, though. One solution is to create a local secret variables file
+and use `-var-file` to load it.
 
 You can also use multiple `-var-file` arguments in a single command, with some
 checked in to version control and others not checked in. For example:
 
 ```raw
-$ terraform apply \
+terraform apply \
   -var-file="secret.tfvars" \
   -var-file="production.tfvars"
 ```
@@ -1375,7 +1428,10 @@ Maps are a way to create variables that are lookup tables. In our configuration,
 we've hard-coded the machine type to `f1-micro`. We might want different machine
 types for some environments. We can use a map to accomplish this.
 
-Add the following to your `variables.tf` file:
+Add the following to your `variables.tf` file.
+
+{{editor-open-file filePath="tutorial/variables.tf"}}
+
 
 ```hcl
 variable "environment" {
@@ -1421,9 +1477,8 @@ example: `var.machine_types["dev"]`.
 We set defaults above, but maps can also be set using the `-var` and
 `-var-file` values. For example:
 
-```raw
-$ terraform apply -var 'machine_types={ "dev" = "f1-micro", test = "n1-standard-16", prod = "n1-standard-16" }'
-# ...
+```bash
+terraform apply -var 'machine_types={"dev" = "f1-micro", test = "n1-standard-16", prod = "n1-standard-16"}'
 ```
 
 **Note**: Even if every key will be assigned as input, the variable must be
@@ -1441,7 +1496,10 @@ variable "machine_types" {
 }
 ```
 
-You can specify values in your `terraform.tfvars` file:
+You can specify values in your `terraform.tfvars` file.
+
+{{editor-open-file filePath="tutorial/terraform.tfvars"}}
+
 
 ```hcl
 region = "us-central1"
@@ -1471,7 +1529,9 @@ output` command.
 ### Defining Outputs
 
 Let's define an output to show us the static IP address that we created. Edit
-the file called `outputs.tf` with the following contents:
+the file called `outputs.tf` with the following contents.
+
+{{editor-open-file filePath="tutorial/outputs.tf"}}
 
 ```hcl
 output "ip" {
@@ -1497,8 +1557,11 @@ Run `terraform refresh` to populate the output. This will refresh your state by
 comparing it to your cloud infrastructure. In the process, it will also pick up
 the new output. You should see output like this:
 
+```bash
+terraform refresh
+```
+
 ```raw
-$ terraform refresh
 google_compute_network.vpc_network: Refreshing state... [id=terraform-network]
 google_compute_address.vm_static_ip: Refreshing state... [id=orbital-avatar-247819/us-central1/terraform-static-ip]
 google_compute_instance.vm_instance: Refreshing state... [id=terraform-instance]
@@ -1510,8 +1573,11 @@ ip = 35.192.68.38
 
 You'll also see outputs after running `terraform apply`, or you can query the outputs `terraform output`:
 
-```shell
-$ terraform output ip
+```bash
+terraform output ip
+```
+
+```raw
 104.154.236.90
 ```
 
@@ -1542,7 +1608,9 @@ In this example, we're going to use a [network module for
 GCP](https://registry.terraform.io/modules/terraform-google-modules/network/google/1.1.0),
 which will set up a more advanced networking configuration for us.
 
-Add the following to your `main.tf` file:
+Add the following to your `main.tf` file.
+
+{{editor-open-file filePath="tutorial/main.tf"}}
 
 ```hcl
 module "network" {
@@ -1631,8 +1699,11 @@ They need to be installed on your system before you can use them in your
 configuration. You can do that with the _init_ command. Run `terraform init`
 now:
 
+```bash
+terraform init
+```
+
 ```raw
-$ terraform init
 Initializing modules...
 Downloading terraform-google-modules/network/google 1.1.0 for network...
 - network in .terraform/modules/network/terraform-google-modules-terraform-google-network-2ada6f9
@@ -1679,8 +1750,11 @@ Now run `terraform apply`.
 The output is similar to what we saw when using resources directly, but the
 resource names now have module paths prefixed to their names:
 
+```bash
+terraform apply
+```
+
 ```raw
-$ ./terraform apply
 google_compute_network.vpc_network: Refreshing state... [id=terraform-network]
 google_compute_address.vm_static_ip: Refreshing state... [id=capable-stream-249119/us-central1/terraform-static-ip]
 module.network.data.google_compute_subnetwork.created_subnets[0]: Refreshing state...
@@ -1883,9 +1957,11 @@ output "vpc_network_subnets_ips" {
 If you run `terraform apply` again, Terraform will make no changes to
 infrastructure, but you'll now see the "vpc_network_subnets_ips" output:
 
-```raw
-$ terraform apply
+```bash
+terraform apply
+```
 
+```raw
 Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
 
 Outputs:
@@ -1969,6 +2045,8 @@ Copy the user token to your clipboard, and create a Terraform CLI Configuration
 file. This file is This file is located at `%APPDATA%\terraform.rc` on Windows
 systems, and `~/.terraformrc` on other systems.
 
+{{editor-open-file filePath="~/.terraformrc"}}
+
 Paste the user token into that file like so:
 
 ```hcl
@@ -1983,9 +2061,11 @@ configuring Terraform Cloud in [the documentation](https://www.terraform.io/docs
 Now that you've configured your remote backend, run `terraform init` to setup
 Terraform. It should ask if you want to migrate your state to Terraform Cloud.
 
-```raw
-$ terraform init
+```bash
+terraform init
+```
 
+```raw
 Initializing the backend...
 Do you want to copy existing state to the new backend?
   Pre-existing state was found while migrating the previous "local" backend to the
@@ -2014,8 +2094,11 @@ use this backend unless the backend configuration changes.
 Now, if you run `terraform apply`, Terraform should state that there are no
 changes:
 
+```bash
+terraform apply
+```
+
 ```raw
-$ terraform apply
 # ...
 
 Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
@@ -2060,8 +2143,11 @@ As a final step, you will probably want to destroy the infrastructure you
 created for this lab, to avoid being charged for it in the future. Do so by
 running `terraform destroy`:
 
+```bash
+terraform destroy
+```
+
 ```raw
-$ terraform destroy
 module.network.google_compute_network.network: Refreshing state... [id=terraform-vpc-network]
 google_compute_address.vm_static_ip: Refreshing state... [id=capable-stream-249119/us-central1/terraform-static-ip]
 module.network.google_compute_subnetwork.subnetwork[1]: Refreshing state... [id=us-central1/subnet-02]
