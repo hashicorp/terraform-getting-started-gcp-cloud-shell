@@ -61,9 +61,11 @@ Create or select the project you'd like to use throughout this guide below.
 
 You can set the project id to use for the rest of this guide with the following command:
 
+```bash
+export GOOGLE_CLOUD_PROJECT=<PROJECT-ID>
 ```
-export GOOGLE_CLOUD_PROJECT={{project-id}}
-```
+
+Be sure to use the project ID, not the project name!
 
 #### Authentication
 
@@ -91,7 +93,7 @@ When run, Terraform will load all configuration files from the current directory
 
 Inside of it there should be a file named `main.tf`. Terraform recognizes files ending in `.tf` or `.tf.json` as configuration files and will load them when it runs.
 
-{{editor-open-file filePath="tutorial/main.tf"}}
+<walkthrough-editor-open-file filePath="terraform-getting-started-gcp-cloud-shell/tutorial/main.tf">main.tf</walkthrough-editor-open-file>
 
 First, we'll configure the provider. Add the following to `main.tf`:
 
@@ -1252,8 +1254,6 @@ Let's first extract a few of the hardcoded values into variables.
 
 Edit the file called `variables.tf` to add the following contents.
 
-{{editor-open-file filePath="tutorial/variables.tf"}}
-
 ```hcl
 variable "project" { }
 
@@ -1314,9 +1314,6 @@ this way every time you run terraform.
 To persist variable values, create a file and assign variables within
 this file. Edit the file named `terraform.tfvars` with the following
 contents.
-
-{{editor-open-file filePath="tutorial/terraform.tfvars"}}
-
 
 ```hcl
 project = "{{project-id}}"
@@ -1430,9 +1427,6 @@ types for some environments. We can use a map to accomplish this.
 
 Add the following to your `variables.tf` file.
 
-{{editor-open-file filePath="tutorial/variables.tf"}}
-
-
 ```hcl
 variable "environment" {
   type = string
@@ -1498,9 +1492,6 @@ variable "machine_types" {
 
 You can specify values in your `terraform.tfvars` file.
 
-{{editor-open-file filePath="tutorial/terraform.tfvars"}}
-
-
 ```hcl
 region = "us-central1"
 
@@ -1530,8 +1521,6 @@ output` command.
 
 Let's define an output to show us the static IP address that we created. Edit
 the file called `outputs.tf` with the following contents.
-
-{{editor-open-file filePath="tutorial/outputs.tf"}}
 
 ```hcl
 output "ip" {
@@ -1609,8 +1598,6 @@ GCP](https://registry.terraform.io/modules/terraform-google-modules/network/goog
 which will set up a more advanced networking configuration for us.
 
 Add the following to your `main.tf` file.
-
-{{editor-open-file filePath="tutorial/main.tf"}}
 
 ```hcl
 module "network" {
@@ -2044,8 +2031,6 @@ generate one on the [user settings page](https://app.terraform.io/app/settings/t
 Copy the user token to your clipboard, and create a Terraform CLI Configuration
 file. This file is This file is located at `%APPDATA%\terraform.rc` on Windows
 systems, and `~/.terraformrc` on other systems.
-
-{{editor-open-file filePath="~/.terraformrc"}}
 
 Paste the user token into that file like so:
 
