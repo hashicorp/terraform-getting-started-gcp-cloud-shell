@@ -10,7 +10,7 @@ Since this guide will be using Google Cloud Platform (GCP), it's designed for th
 
 ## Using
 
-You can follow this guide from within Google's Cloud Shell starting with [this link](https://console.cloud.google.com/cloudshell/open?cloudshell_image=gcr.io/graphite-cloud-shell-images/terraform:0.12&cloudshell_git_repo=https://github.com/robin-norwood/terraform-getting-started-gcp-cloud-shell&cloudshell_git_branch=master&cloudshell_working_dir=tutorial/&open_in_editor=./main.tf&cloudshell_tutorial=./cloudshell_tutorial.md)
+You can follow this guide from within Google's Cloud Shell starting with [this link](https://console.cloud.google.com/cloudshell/open?cloudshell_image=gcr.io/graphite-cloud-shell-images/terraform:latest&cloudshell_git_repo=https://github.com/robin-norwood/terraform-getting-started-gcp-cloud-shell&cloudshell_git_branch=master&cloudshell_working_dir=tutorial/&open_in_editor=./main.tf&cloudshell_tutorial=./cloudshell_tutorial.md)
 
 To follow the guide, you'll need an active Google Cloud Platform account.
 
