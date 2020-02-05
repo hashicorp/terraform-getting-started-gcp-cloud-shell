@@ -52,27 +52,23 @@ While everything provisioned in this guide should fall within GCP's free tier, i
 
 ### Setting up GCP
 
-In addition to a GCP account, you'll need to create a **GCP Project** to follow
+In addition to a GCP account, you'll need to use a **GCP Project** to follow
 this guide.
 
-Create or select the project you'd like to use throughout this guide below.
+Create or select the project you'd like to use throughout this guide below:
 
 <walkthrough-project-billing-setup></walkthrough-project-billing-setup>
 
-You can set the project id to use for the rest of this guide with the following command:
-
-```bash
-export GOOGLE_CLOUD_PROJECT=<PROJECT-ID>
-```
-
-Be sure to use the project ID, not the project name!
+This will also set the project ID correctly in future steps, so be sure to
+either create or select a project before moving on!
 
 #### Authentication
 
-When we're using Google Cloud Shell, the shell is already configured with access
-to your GCP account, so you won't need to do anything extra to authenticate and
-start provisioning resources. When using Terraform from another environment,
-you'll need to configure authentication. You can [read about credentials
+When you are using Google Cloud Shell, the shell is already configured with
+access to your GCP credentials, so you won't need to do anything extra to
+authenticate and start provisioning resources. When using Terraform from another
+environment, you'll need to configure authentication. You can [read about
+credentials
 here](https://www.terraform.io/docs/providers/google/provider_reference.html#credentials).
 
 ## Terraform Configuration
@@ -99,6 +95,8 @@ First, we'll configure the provider. Add the following to `main.tf`:
 
 ```hcl
 provider "google" {
+  version = "3.5.0"
+
   project = "{{project-id}}"
   region  = "us-central1"
   zone    = "us-central1-c"
@@ -120,7 +118,8 @@ existing configuration from version control -- is `terraform init`, which
 initializes various local settings and data that will be used by subsequent
 commands.
 
-Run the command `terraform init` in the same directory as your main.tf file now:
+Initialize your new Terraform configuration by running the `terraform init`
+command in the same directory as your main.tf file.
 
 ```bash
 terraform init
@@ -154,14 +153,8 @@ rerun this command to reinitialize your working directory. If you forget, other
 commands will detect it and remind you to do so if necessary.
 ```
 
-The `google` provider plugin has been downloaded and installed in a subdirectory
-of the current working directory, along with various other book-keeping files.
-
-The output specifies which version of the plugin was installed, and suggests
-specifying that version in configuration to ensure that running `terraform init`
-in future will install a compatible version. This step is not necessary to
-follow this getting started guide, since we'll discard this configuration at the
-end.
+The Google Cloud Platform provider plugin has been downloaded and installed in a
+subdirectory of the current working directory.
 
 ## Applying Configuration
 
@@ -268,7 +261,7 @@ dependent on each resource provider and is fully documented within our
 [providers reference](https://www.terraform.io/docs/providers/index.html).
 
 The [GCP provider](https://www.terraform.io/docs/providers/google/index.html)
-documents supported resources resources, including
+documents supported resources, including
 [google_compute_network](https://www.terraform.io/docs/providers/google/r/compute_network.html).
 
 There are a number of optional arguments, but for our network, we just specify
@@ -276,7 +269,11 @@ the name, which will be how the network is identified in GCP.
 
 ### Creating Resources
 
-Run `terraform apply` again. You should see output similar to this:
+Create the new resources by running `terraform apply` again.
+
+```bash
+terraform apply
+```
 
 ```raw
 ...
@@ -330,16 +327,16 @@ Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 ```
 
 After this, Terraform is all done! You can go to the GCP console to see the
-network you created. Make sure you're looking at the same region and project
-that was configured in the provider configuration.
+network you have provisioned. Make sure you're looking at the same region and
+project that you configured in the provider configuration.
 
 If you look in your current working directory, you'll see that Terraform also
 wrote some data into the `terraform.tfstate` file. This state file is extremely
 important; it keeps track of Terraform's understanding of the resources it
 created. We recommended that you use source control for the configuration files,
-but the state should not be stored in source control. You can [setup remote
-state](https://www.terraform.io/docs/state/remote.html) to store and share the
-state with your teams. You'll see how to do so later on in this guide.
+but the state file should not be stored in source control. You can also [setup
+remote state](https://www.terraform.io/docs/state/remote.html) to store and
+share the state with your teams.
 
 ## Inspecting State
 
@@ -379,8 +376,8 @@ resources or outputs, which will be covered later in this guide.
 ## Changing Infrastructure
 
 In the previous section, you created your first infrastructure with Terraform: a
-VPC network. In this section, we're going to modify your configuration, and see
-how Terraform handles change.
+VPC network. In this section, you will modify your configuration and see how
+Terraform handles change.
 
 Infrastructure is continuously evolving, and Terraform was built to help manage
 and enact that change. As you change Terraform configurations, Terraform builds
@@ -393,8 +390,10 @@ evolves over time.
 
 ### Adding Resources
 
-We can add resources to our configuration. We'll create a compute instance by
-adding the following to `main.tf`:
+You can add new resources to your configuration by adding them to your Terraform
+configuration and running `terraform apply` to provision them.
+
+First, add a google compute instance resource to `main.tf`:
 
 ```hcl
 resource "google_compute_instance" "vm_instance" {
@@ -415,12 +414,13 @@ resource "google_compute_instance" "vm_instance" {
 }
 ```
 
-We're setting a few more arguments this time. The name and machine type are
+This resource includes a few more arguments. The name and machine type are
 simple strings, but `boot_disk` and `network_interface` are more complex blocks.
 You can see all of the available options [in the
 documentation](https://www.terraform.io/docs/providers/google/r/compute_instance.html).
-For this example, we'll use a Debian operating system, and the VPC Network we
-created earlier. Notice how we refer to the network's name property with
+For this example, your compute instance will use a Debian operating system, and
+will be connected to the VPC Network you created earlier. Notice how this
+configuration refers to the network's name property with
 `google_compute_network.vpc_network.name` --
 `google_compute_network.vpc_network` is the ID, matching the values in the block
 that defines the network, and `name` is a property of that resource.
@@ -428,7 +428,7 @@ that defines the network, and `name` is a property of that resource.
 The presence of the `access_config` block, even without any arguments, ensures
 that the instance will be accessible over the internet.
 
-We can now apply that change:
+Next, apply this change to create the compute instance.
 
 ```bash
 terraform apply
@@ -527,7 +527,9 @@ resource in GCP.
 
 ## Changing Resources
 
-Adding new resources is one thing. Terraform also supports changing resources.
+Adding new resources is a common task, but changing resource configuration is
+another important task that Terraform supports.
+
 Add a "tags" argument to your "vm_instance" so that it looks like this:
 
 ```hcl
@@ -539,7 +541,7 @@ resource "google_compute_instance" "vm_instance" {
 # ...
 ```
 
-Run `terraform apply` again. You should see output like this:
+Run `terraform apply` again to update the instance.
 
 ```bash
 terraform apply
@@ -580,9 +582,14 @@ tags to your instance.
 
 ## Destructive Changes
 
-Let's change the disk image of our instance. Edit the `boot_disk` block inside
-your `vm_instance` resource your configuration file and change it to the
-following:
+A destructive change is a change that requires the provider to replace the
+existing resource rather than updating it. This usually happens because the
+cloud provider doesn't support updating the resource in the way described by
+your configuration.
+
+Changing the disk image of our instance is one example of a destructive change.
+Edit the `boot_disk` block inside the `vm_instance` resource in your
+configuration file and change it to the following.
 
 ```hcl
   boot_disk {
@@ -592,9 +599,11 @@ following:
   }
 ```
 
-We've changed the boot disk from being a Debian 9 image to use Google's
-Container-Optimized OS. After editing the configuration, run `terraform apply`
-again to see how Terraform will apply this change to the existing resources.
+This will change the boot disk from being a Debian 9 image to use Google's
+Container-Optimized OS.
+
+Now run `terraform apply` again to see how Terraform will apply this change to
+the existing resources.
 
 ```bash
 terraform apply
@@ -682,7 +691,7 @@ Do you want to perform these actions?
 
 The prefix `-/+` means that Terraform will destroy and recreate the resource,
 rather than updating it in-place. While some attributes can be updated in-place
-(which are shown with the `~` prefix), changing the boot disk image for a VM
+(which are shown with the `~` prefix), changing the boot disk image for an
 instance requires recreating it. Terraform and the GCP provider handle these
 details for you, and the execution plan makes it clear what Terraform will do.
 
@@ -718,13 +727,13 @@ again to see the new values associated with this instance.
 
 ## Destroying Infrastructure
 
-We've now seen how to build and change infrastructure. Before we move on to
-creating multiple resources and showing resource dependencies, we're going to go
-over how to completely destroy your Terraform-managed infrastructure.
+You have now seen how to build and change infrastructure. Before moving on to
+creating multiple resources and showing resource dependencies, you will see how
+to completely destroy your Terraform-managed infrastructure.
 
 Destroying your infrastructure is a rare event in production environments. But
 if you're using Terraform to spin up multiple environments such as development,
-test, and QA, then destroying is often a useful action.
+testing, and staging, then destroying is often a useful action.
 
 ### Terraform Destroy
 
@@ -796,9 +805,9 @@ google_compute_network.vpc_network: Destruction complete after 1m17s
 Destroy complete! Resources: 2 destroyed.
 ```
 
-Just like with `apply`, Terraform determines the order in which things must be
-destroyed. GCP won't allow a VPC network to be deleted if there are resources
-still in it, so Terraform waits until the instance is destroyed before
+Just like with `terraform apply`, Terraform determines the order in which things
+must be destroyed. GCP won't allow a VPC network to be deleted if there are
+resources still in it, so Terraform waits until the instance is destroyed before
 destroying the network. When performing operations, Terraform creates a
 dependency graph to determine the correct order of operations. In more
 complicated cases with multiple resources, Terraform will perform operations in
@@ -806,26 +815,26 @@ parallel when it's safe to do so.
 
 ## Resource Dependancies
 
-In this section, we're going to learn more about resource dependencies and how to
-use resource parameters to share information about one resource with other
-resources.
+Most resources work with other parts of your infrastructure, either by being
+dependent on other resources to function, such as an instance requiring a
+virtual network, or use resource parameters to share information about one
+resource with other resources.
 
 Real-world infrastructure has a diverse set of resources and resource types.
 Terraform configurations can contain multiple resources, multiple resource
 types, and these types can even span multiple providers.
 
 On this page, we'll show a basic example of how to configure multiple resources
-and how to reference the attributes of other resources to configure other
-resources.
+and how to use resource attributes to configure other resources.
 
-If you've been following this guide, you destroyed your resources in the last
-step, and so `terraform show` will show no resources:
+If you've been following this track, you destroyed your resources in the last
+guide, and so `terraform show` will show no resources.
 
 ```bash
 terraform show
 ```
 
-Go ahead and recreate your network and instance by running `terraform apply`:
+ Now recreate your network and instance by running `terraform apply`.
 
 ```bash
 terraform apply
@@ -867,8 +876,8 @@ As the error says, in this case it took a few minutes for the service to be disa
 
 ### Assigning an Elastic IP
 
-Now we'll improve your configuration by assigning a static IP to the VM instance
-we're managing. Modify your `main.tf` and add the following:
+Now add to your configuration by assigning a static IP to the VM instance.
+Modify the `main.tf` and add the following.
 
 ```hcl
 resource "google_compute_address" "vm_static_ip" {
@@ -930,8 +939,8 @@ can't guarantee that exactly these actions will be performed if
 
 Unlike `terraform apply`, the _plan_ command will only show what would be
 changed, and never actually apply the changes directly. Notice that the only
-change we're making is to add a static IP. What we want is to attach the IP
-address to your instance.
+change you have made so far is to add a static IP. Next, you need to attach the
+IP address to your instance.
 
 Update the `network_interface` configuration for your instance like so:
 
@@ -1060,9 +1069,9 @@ Implicit dependencies via interpolation expressions are the primary way
 to inform Terraform about these relationships, and should be used whenever
 possible.
 
-Sometimes there are dependencies between resources that are _not_ visible to
-Terraform. The `depends_on` argument is accepted by any resource and accepts
-a list of resources to create _explicit dependencies_ for.
+Sometimes there are dependencies between resources that are not visible to
+Terraform. The `depends_on` argument can be added to any resource and accepts a
+list of resources to create explicit dependencies for.
 
 For example, when we created the vpc_network, we added an explicit dependency on the project services we enabled:
 
@@ -1093,7 +1102,8 @@ GCP](https://www.packer.io/docs/builders/googlecompute.html).
 
 In general, we recommend that you use a tool like Packer so that your
 infrastructure requires little or no provisioning after it's deployed. Managing
-your infrastructure this way is sometimes called _immutable infrastructure_, and can help ensure your infrastructure is more robust and fault tolerant.
+your infrastructure this way is sometimes called _immutable infrastructure_, and
+can help ensure your infrastructure is more robust and fault tolerant.
 
 That said, many infrastructures still require some sort of initialization or
 software provisioning step. Terraform uses _provisioners_ to upload files, run
@@ -1102,8 +1112,8 @@ management tools.
 
 ### Defining a Provisioner
 
-To define a provisioner, modify the resource block defining the `vm_instance` to
-look like the following:
+To define a provisioner, modify the resource block defining the first
+`vm_instance` in your configuration to look like the following.
 
 ```hcl
 resource "google_compute_instance" "vm_instance" {
@@ -1157,11 +1167,10 @@ Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
 Terraform found nothing to do - and if you check, you'll find that there's no
 `ip_address.txt` file on the cloud shell filesystem.
 
-Terraform treats provisioners differently from other properties. Provisioners
-only run when a resource is created, but adding a provisioner does not force
-that resource to be destroyed and recreated. If this is what we want, we can use
-`terraform taint` to tell Terraform to recreate the instance. Run the command
-`terraform taint google_compute_instance.vm_instance` now:
+Terraform treats provisioners differently from other module arguments.
+Provisioners only run when a resource is created, but adding a provisioner does
+not force that resource to be destroyed and recreated. Use `terraform taint` to
+tell Terraform to recreate the instance.
 
 ```bash
 terraform taint google_compute_instance.vm_instance
@@ -1205,7 +1214,8 @@ google_compute_instance.vm_instance: Creation complete after 52s [id=terraform-i
 Apply complete! Resources: 1 added, 0 changed, 1 destroyed.
 ```
 
-You can verify everything worked by looking at the `ip_address.txt` file:
+Verify everything worked by looking at the contents of the `ip_address.txt`
+file.
 
 ```bash
 cat ip_address.txt
@@ -1215,13 +1225,13 @@ cat ip_address.txt
 terraform-instance: 35.194.46.141
 ```
 
-It contains the IP, just as we asked!
+It contains the IP address, just as we asked.
 
 ### Failed Provisioners and Tainted Resources
 
 If a resource is successfully created but fails a provisioning step, Terraform
 will error and mark the resource as _tainted_. A resource that is tainted still
-exists, but can't be considered safe to use since provisioning failed.
+exists, but shouldn't be considered safe to use, since provisioning failed.
 
 When you generate your next execution plan, Terraform will remove any tainted
 resources and create new resources, attempting to provision them again after
@@ -1243,14 +1253,14 @@ If you need to use destroy provisioners, please
 
 ## Variables
 
-You now have enough Terraform knowledge to create useful configurations, but
-we're still hard-coding our project name, zone, etc. To become truly shareable
-and version controlled, we need to parameterize the configurations. This page
-introduces input variables as a way to do this.
+You now have enough Terraform knowledge to create useful configurations, but the
+configuration still hard codes the project name, zone, and other arguments. To
+become truly shareable and version controlled, we need to parameterize the
+configurations. This page introduces input variables as a way to do this.
 
 ### Defining Variables
 
-Let's first extract a few of the hardcoded values into variables.
+First, convert a few of the hardcoded values into variables.
 
 Edit the file called `variables.tf` to add the following contents.
 
@@ -1272,15 +1282,16 @@ Terraform loads all files ending in `.tf` in a directory, so it doesn't matter
 to terraform where your variables are defined. We recommend defining them in
 their own file to make your configuration easier to organize and understand.
 
-This defines three variables within your Terraform configuration. The first one
-has an empty block: `{ }`. The other two set defaults. If a default value is
+This file defines three variables within your Terraform configuration. The first
+one has an empty block: `{ }`. The other two set defaults. If a default value is
 set, the variable is optional. Otherwise, the variable is required. If you run
-`terraform plan` now, Terraform will prompt you for the value of the _region_
-variable.
+`terraform plan` now, Terraform will prompt you for the values for `project` and
+`credentials_file`.
 
 ### Using Variables in Configuration
 
-Next, update the GCP provider configuration in `main.tf` with the following:
+Next, update the GCP provider configuration in `main.tf` to use these new
+variables.
 
 ```hcl
 provider "google" {
@@ -1341,12 +1352,10 @@ terraform apply \
 
 #### From environment variables
 
-Terraform will read environment variables in the form of `TF_VAR_name`
-to find the value for a variable. For example, the `TF_VAR_region`
-environment variable can be set to set the `region` terraform variable.
-
-**Note**: Environment variables can only populate string-type variables.
-List and map type variables must be populated via one of the other mechanisms.
+Terraform will read environment variables in the form of `TF_VAR_name` to find
+the value for a variable. For example, in this configuration the `TF_VAR_region`
+environment variable could be used to set the value of the `region` terraform
+variable.
 
 #### UI Input
 
@@ -1374,6 +1383,9 @@ If no type is specified, then Terraform assumes a variable is a _string_. Like
 most programming languages, strings are just a sequence of characters. You can
 also explicitly define a variable as a string.
 
+Set the type of the `project` variable to be a string by updating
+`variables.tf`.
+
 ```hcl
 variable "project" {
   type = string
@@ -1399,8 +1411,11 @@ variable "web_instance_count" {
 
 #### Lists
 
-A list is a sequence of values. Lists are defined either explicitly or
-implicitly. For example, add one of the following to `variables.tf`:
+Like lists or arrays found in many programming languages, a list is a sequence
+of values.
+
+Add a variable to `variables.tf` to define the CIDR network blocks to your
+configuration as a list.
 
 ```hcl
 # Either implicitly by using a default value of empty brackets:
@@ -1411,7 +1426,7 @@ variable "cidrs" { type = list }
 ```
 
 You can specify list values in a _tfvars_ file as well. Add the following to
-`terraform.tfvars`:
+`terraform.tfvars`
 
 ```hcl
 cidrs = [ "10.0.0.0/16", "10.1.0.0/16" ]
@@ -1421,24 +1436,30 @@ We'll use these values later on in this guide.
 
 #### Maps
 
-Maps are a way to create variables that are lookup tables. In our configuration,
-we've hard-coded the machine type to `f1-micro`. We might want different machine
-types for some environments. We can use a map to accomplish this.
+Maps are a way to create variables that are lookup tables. Terraform maps are
+similar to data structures found in programming languages, sometimes referred to
+as maps or dictionaries.
 
-Add the following to your `variables.tf` file.
+
+In your configuration, the machine type is currently set to `f1-micro`. You
+might want different machine types for different environments. You can use a map
+to accomplish this.
+
+Add a map that defines the machine types for each environment to your
+`variables.tf` file.
 
 ```hcl
 variable "environment" {
-  type = string
+  type    = string
   default = "dev"
 }
 
 variable "machine_types" {
-  type = "map"
+  type    = map
   default = {
-    "dev" = "f1-micro"
-    "test" = "n1-highcpu-32"
-    "prod" = "n1-highcpu-32"
+    dev  = "f1-micro"
+    test = "n1-highcpu-32"
+    prod = "n1-highcpu-32"
   }
 }
 ```
@@ -1446,7 +1467,8 @@ variable "machine_types" {
 As with lists, a variable can have a map type assigned explicitly, or it can be
 implicitly declared as a map by specifying a default value that is a map.
 
-Now, update your `vm_instance` in `main.tf` as follows:
+Use the `machine_types` map to set the machine type for the first `vm_instance`
+in `main.tf`.
 
 ```hcl
 resource "google_compute_instance" "vm_instance" {
@@ -1463,8 +1485,8 @@ _map_ type variable.
 Run `terraform plan`. Because of the default value we used for `environment`,
 you should see that there are no changes to apply.
 
-The `map` type expression can also use a static value lookup directly. For
-example: `var.machine_types["dev"]`.
+Maps can also use a static value lookup directly. For example:
+`var.machine_types["dev"]` will resolve to `"f1-micro"`.
 
 ##### Assigning Maps
 
@@ -1472,46 +1494,61 @@ We set defaults above, but maps can also be set using the `-var` and
 `-var-file` values. For example:
 
 ```bash
-terraform apply -var 'machine_types={"dev" = "f1-micro", test = "n1-standard-16", prod = "n1-standard-16"}'
-```
+ terraform apply -var 'machine_types={ dev = "f1-micro", test = "n1-standard-16", prod = "n1-standard-16" }'
+ ```
 
 **Note**: Even if every key will be assigned as input, the variable must be
 established as a map in your configuration by setting its type to `map` or its
 default to `{}`.
 
-Here is an example of setting a map's keys from a `.tfvars` file. Starting with these
-variable definitions:
+
+You can also set a map's keys from a `.tfvars` file after it is defined as a
+map.
+
+Starting with these variable definitions in `variables.tf`.
 
 ```hcl
-variable "region" {}
+variable "region" {
+  type    = string
+  default = "us-central1"
+}
 
 variable "machine_types" {
-  type = "map"
+  type    = map
+  default = {
+    dev  = "f1-micro"
+    test = "n1-highcpu-32"
+    prod = "n1-highcpu-32"
+  }
 }
 ```
 
-You can specify values in your `terraform.tfvars` file.
+Specify values in your `terraform.tfvars` file.
 
 ```hcl
 region = "us-central1"
 
 machine_types = {
-  "dev" = "f1-micro"
-  "test" = "n1-highcpu-32"
-  "prod" = "n1-highcpu-32"
+  dev  = "f1-micro"
+  test = "n1-highcpu-32"
+  prod = "n1-highcpu-32"
 }
 ```
 
+Once again, running `terraform apply` at this point will have no effect, because
+the value `"f1-micro"` from the map is the same as the hard coded value used
+originally.
+
 ## Outputs
 
-In the previous section, we introduced input variables as a way to parameterize
-Terraform configurations. In this page, we'll introduce output variables as a
+In the previous guide, we introduced input variables as a way to parameterize
+Terraform configurations. In this guide, we'll introduce output variables as a
 way to organize data to be easily queried and shown back to the Terraform user.
 
-When building potentially complex infrastructure, Terraform stores hundreds or
-thousands of attribute values for all your resources. But as a user of
-Terraform, you may only be interested in a few values of importance, such as a
-load balancer IP, VPN address, etc.
+When building complex infrastructure, Terraform stores hundreds or thousands of
+attribute values for all your resources. But as a user of Terraform, you may
+only be interested in a few values of importance, such as a load balancer IP,
+VPN address, etc.
 
 Outputs are a way to tell Terraform what data is important. This data is
 outputted when `apply` is called, and can be queried using the `terraform
@@ -1529,7 +1566,8 @@ output "ip" {
 ```
 
 **Note**: Just like `variables.tf`, this configuration could go in your `main.tf` file.
-We're putting it in a separate file just to keep things organized.
+  `main.tf` file. We recommend putting outputs and variables in a separate files
+  to to keep things organized.
 
 ### Output Names
 
@@ -1560,7 +1598,16 @@ Outputs:
 ip = 35.192.68.38
 ```
 
-You'll also see outputs after running `terraform apply`, or you can query the outputs `terraform output`:
+You will also see outputs after running `terraform apply`, or you can query the
+outputs with `terraform output`.
+
+```bash
+terraform output
+```
+
+```raw
+ip = 104.154.236.90
+```
 
 ```bash
 terraform output ip
@@ -1574,8 +1621,8 @@ This command is useful for scripts to extract outputs from your configuration.
 
 ## Modules
 
-Up to this point, we've been configuring Terraform by editing Terraform
-configurations directly. As our infrastructure grows, this practice has a few
+Up to this point, you have been configuring Terraform by editing Terraform
+configurations directly. As your infrastructure grows, this practice has a few
 key problems: a lack of organization, a lack of reusability, and difficulties in
 management for teams.
 
@@ -1597,12 +1644,12 @@ In this example, we're going to use a [network module for
 GCP](https://registry.terraform.io/modules/terraform-google-modules/network/google/1.1.0),
 which will set up a more advanced networking configuration for us.
 
-Add the following to your `main.tf` file.
+Use a module to define a network by adding the following to your `main.tf` file.
 
 ```hcl
 module "network" {
   source  = "terraform-google-modules/network/google"
-  version = "1.1.0"
+  version = "2.0.2"
   depends_on = [google_project_services.project_services]
 
   network_name = "terraform-vpc-network"
@@ -1660,9 +1707,9 @@ network with the one provisioned by the new module. Comment out or delete the
 # }
 ```
 
-We'll also need to refer to the new network differently. Inside of the
-configuration for the `vm_instance`, update the `network_interface` section like
-so:
+ You will also need to refer to the new network differently. Inside of the
+ configuration for the `vm_instance`, update the `network_interface` section
+ like so:
 
 ```hcl
 # Replace this line:
@@ -1672,8 +1719,9 @@ so:
     subnetwork = module.network.subnets_names[0]
 ```
 
-Now we're referring to the _output_ of the network module. You can see the
-output values for modules in the [module registry
+
+Now your configuration is referring to the _output_ of the network module. You
+can see the output values for modules in the [module registry
 documentaton](https://registry.terraform.io/modules/terraform-google-modules/network/google/1.1.0?tab=outputs).
 
 Since the instance will now be located in a different network, it will be
@@ -1683,8 +1731,9 @@ destroyed and recreated.
 
 Terraform modules are essentially just pre-packaged Terraform configuration.
 They need to be installed on your system before you can use them in your
-configuration. You can do that with the _init_ command. Run `terraform init`
-now:
+configuration. You can do that with the _init_ command.
+
+Install the network module by running `terraform init` now.
 
 ```bash
 terraform init
@@ -1724,18 +1773,19 @@ commands will detect it and remind you to do so if necessary.
 ```
 
 Now the module is installed on your system and Terraform can use it to provision
-resources.
+resources. You need to run `terraform init` or `terraform get` every time you
+add a new module or want to change module versions.
 
 If you like, you can run `terraform plan` at this point to see what changes will
-be applied. Notice that our instance will be destroyed and recreated because it
-will move to a new network.
+be applied. Notice that your instance will be destroyed and recreated because it
+will move to the new network.
 
 ### Apply Changes
 
 Now run `terraform apply`.
 
 The output is similar to what we saw when using resources directly, but the
-resource names now have module paths prefixed to their names:
+resources now have the module name prefixed to their names.
 
 ```bash
 terraform apply
@@ -1929,11 +1979,11 @@ describes all of the different values it produces.
 One of the supported outputs is called `subnets_ips`, and its value describes
 the IPs and CIDR blocks created for our network.
 
-To reference this, we'll just put it into our _own_ output value. This
-value could actually be used anywhere: in another resource, to configure
-another provider, etc.
+To reference this, we'll just put it into our own output value. This value could
+actually be used anywhere: in another resource, to configure another provider,
+etc.
 
-Add the following to `outputs.tf`:
+Add an output for the VPC's subnet IP addresses to `outputs.tf`.
 
 ```hcl
 output "vpc_network_subnets_ips" {
@@ -1942,7 +1992,7 @@ output "vpc_network_subnets_ips" {
 ```
 
 If you run `terraform apply` again, Terraform will make no changes to
-infrastructure, but you'll now see the "vpc_network_subnets_ips" output:
+infrastructure, but you'll now see the "vpc_network_subnets_ips" output.
 
 ```bash
 terraform apply
@@ -1961,166 +2011,7 @@ vpc_network_subnets_ips = [
 ```
 
 Infrastructure configuration can be complex and often repetitive. Modules
-provide a way to re-use and share standard configuration patterns. In addition
-to using modules provided in the module registry, you can also create and share
-Terraform modules.
-
-## Remote State
-
-You have now seen how to build, change, and destroy infrastructure from a local
-machine. This is great for testing and development, but in production
-environments it is considered a best practice to store state elsewhere than your local machine.
-The best way to do this is by running Terraform in a remote environment with
-shared access to state.
-
-Terraform supports team-based workflows with a feature known as [remote
-backends](https://www.terraform.io/docs/backends/index.html). Remote backends
-allow Terraform to use a shared storage space for state data, so any member of
-your team can use Terraform to manage the same infrastructure.
-
-Depending on the features you wish to use, Terraform has multiple remote backend
-options. HashiCorp recommends using [Terraform
-Cloud](https://learn.hashicorp.com/terraform/cloud/tf_cloud_gettingstarted.html).
-Terraform Cloud offers free state management with no limits on users,
-workspaces, locking, and HashiCorp Vault encryption.
-
-[Terraform
-Enterprise](https://www.hashicorp.com/products/terraform/?utm_source=oss&utm_medium=getting-started&utm_campaign=terraform)
-is HashiCorp's commercial solution and also acts as a remote backend. Terraform
-Enterprise allows teams to easily version, audit, and collaborate on
-infrastructure changes. Each proposed change generates a Terraform plan which
-can be reviewed and collaborated on as a team. When a proposed change is
-accepted, the Terraform logs are stored, resulting in a linear history of
-infrastructure states to help with auditing and policy enforcement. Additional
-benefits to running Terraform remotely include moving access credentials off of
-developer machines and freeing local machines from long-running Terraform
-processes.
-
-### How to Store State Remotely
-
-First, we'll use Terraform Cloud as our backend. Terraform Cloud offers free
-remote state management. Terraform Cloud is the recommended best practice for
-remote state storage.
-
-If you don't have an account, please [sign up
-here](https://app.terraform.io/signup) for this guide. For more information on
-Terraform Cloud, [view our getting started
-guide](https://learn.hashicorp.com/terraform/cloud/tf_cloud_gettingstarted.html).
-
-When you sign up for Terraform Cloud, you'll create an organization. Make a note
-of the organization's name.
-
-Next, configure the backend in your configuration with the organization name,
-and a new workspace name of your choice:
-
-```hcl
-terraform {
-  backend "remote" {
-    organization = "Example-Org-Name"
-
-    workspaces {
-      name = "Example-Workspace"
-    }
-  }
-}
-```
-
-You'll also need a user token to authenticate with Terraform Cloud. You can
-generate one on the [user settings page](https://app.terraform.io/app/settings/tokens).
-
-Copy the user token to your clipboard, and create a Terraform CLI Configuration
-file. This file is This file is located at `%APPDATA%\terraform.rc` on Windows
-systems, and `~/.terraformrc` on other systems.
-
-Paste the user token into that file like so:
-
-```hcl
-credentials "app.terraform.io" {
-  token = "REPLACE_ME"
-}
-```
-
-Save and close this file, we don't need it again. You can read more about
-configuring Terraform Cloud in [the documentation](https://www.terraform.io/docs/enterprise/free/index.html).
-
-Now that you've configured your remote backend, run `terraform init` to setup
-Terraform. It should ask if you want to migrate your state to Terraform Cloud.
-
-```bash
-terraform init
-```
-
-```raw
-Initializing the backend...
-Do you want to copy existing state to the new backend?
-  Pre-existing state was found while migrating the previous "local" backend to the
-  newly configured "remote" backend. No existing state was found in the newly
-  configured "remote" backend. Do you want to copy this state to the new "remote"
-  backend? Enter "yes" to copy and "no" to start with an empty state.
-
-  Enter a value:
-```
-
-Say "yes" and Terraform will copy your state:
-
-```raw
-...
-
-  Enter a value: yes
-
-Releasing state lock. This may take a few moments...
-
-Successfully configured the backend "remote"! Terraform will automatically
-use this backend unless the backend configuration changes.
-
-...
-```
-
-Now, if you run `terraform apply`, Terraform should state that there are no
-changes:
-
-```bash
-terraform apply
-```
-
-```raw
-# ...
-
-Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
-
-Outputs:
-
-ip = 104.154.236.90
-```
-
-Terraform is now storing your state remotely in Terraform Cloud. Remote state
-storage makes collaboration easier and keeps state and secret information off
-your local disk. Remote state is loaded only in memory when it is used.
-
-If you want to move back to local state, you can remove the backend
-configuration block from your configuration and run `terraform init` again.
-Terraform will once again ask if you want to migrate your state back to local.
-
-### Terraform Enterprise
-
-[Terraform
-Enterprise](https://www.hashicorp.com/products/terraform/?utm_source=oss&utm_medium=getting-started&utm_campaign=terraform)
-is a commercial solution which combines a predictable and reliable shared run
-environment with tools to help you work together on Terraform configurations and
-modules.
-
-Although Terraform Enterprise can act as a standard remote backend to support
-Terraform runs on local machines, it works even better as a remote run
-environment. It supports two main workflows for performing Terraform runs:
-
-- A VCS-driven workflow, in which it automatically queues plans whenever changes
-  are committed to your configuration's VCS repo.
-- An API-driven workflow, in which a CI pipeline or other automated tool can
-  upload configurations directly.
-
-For a hands-on introduction to Terraform Enterprise, [follow the Terraform
-Enterprise getting started
-guide](https://www.terraform.io/docs/enterprise/getting-started/index.html).
+provide a way to re-use and share standard configuration patterns.
 
 ## Destroy
 
@@ -2332,3 +2223,7 @@ As a next step, the following resources are available:
 - [Examples](https://www.terraform.io/intro/examples/index.html) - The examples
   have more full featured configuration files, showing some of the possibilities
   with Terraform.
+
+- [Terraform Cloud](/terraform/cloud-gettingstarted/tfc_overview) - Terraform
+  Cloud is a hosted application that can be used to store Terraform state and
+  execute Terraform commands.
