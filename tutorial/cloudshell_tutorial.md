@@ -268,7 +268,7 @@ dependent on each resource provider and is fully documented within our
 [providers reference](https://www.terraform.io/docs/providers/index.html).
 
 The [GCP provider](https://www.terraform.io/docs/providers/google/index.html)
-documents supported resources resources, including
+documents supported resources, including
 [google_compute_network](https://www.terraform.io/docs/providers/google/r/compute_network.html).
 
 There are a number of optional arguments, but for our network, we just specify
