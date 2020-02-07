@@ -390,10 +390,10 @@ evolves over time.
 
 ### Adding Resources
 
-You can add new resources to your configuration by adding them to your Terraform
-configuration and running `terraform apply` to provision them.
+You can add new resources by adding them to your Terraform configuration and
+running `terraform apply` to provision them.
 
-First, add a google compute instance resource to `main.tf`:
+First, add a google compute instance resource to `main.tf`.
 
 ```hcl
 resource "google_compute_instance" "vm_instance" {
@@ -1254,7 +1254,7 @@ If you need to use destroy provisioners, please
 ## Variables
 
 You now have enough Terraform knowledge to create useful configurations, but the
-configuration still hard codes the project name, zone, and other arguments. To
+configuration still hardcodes the project name, zone, and other arguments. To
 become truly shareable and version controlled, we need to parameterize the
 configurations. This page introduces input variables as a way to do this.
 
@@ -1354,8 +1354,7 @@ terraform apply \
 
 Terraform will read environment variables in the form of `TF_VAR_name` to find
 the value for a variable. For example, in this configuration the `TF_VAR_region`
-environment variable could be used to set the value of the `region` terraform
-variable.
+environment variable could be used to set the `region` terraform variable.
 
 #### UI Input
 
@@ -1415,18 +1414,15 @@ Like lists or arrays found in many programming languages, a list is a sequence
 of values.
 
 Add a variable to `variables.tf` to define the CIDR network blocks to your
-configuration as a list.
+configuration as a list by either setting the default to a list, or setting the
+type to `list`.
 
 ```hcl
-# Either implicitly by using a default value of empty brackets:
-variable "cidrs" { default = [] }
-
-# Or explicitly by specifying the type:
 variable "cidrs" { type = list }
 ```
 
 You can specify list values in a _tfvars_ file as well. Add the following to
-`terraform.tfvars`
+`terraform.tfvars`.
 
 ```hcl
 cidrs = [ "10.0.0.0/16", "10.1.0.0/16" ]
@@ -1979,9 +1975,11 @@ describes all of the different values it produces.
 One of the supported outputs is called `subnets_ips`, and its value describes
 the IPs and CIDR blocks created for our network.
 
-To reference this, we'll just put it into our own output value. This value could
-actually be used anywhere: in another resource, to configure another provider,
-etc.
+You can reference a module's output with the expression `module.<MODULE
+NAME>.<OUTPUT NAME>`. Like most expressions, this value can be used almost
+anywhere: in another resource, to configure another module, etc. To demonstrate,
+try referencing it in a root-level output, so Terraform displays it after an
+apply.
 
 Add an output for the VPC's subnet IP addresses to `outputs.tf`.
 
