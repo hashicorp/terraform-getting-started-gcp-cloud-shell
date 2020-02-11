@@ -130,17 +130,7 @@ Initializing the backend...
 
 Initializing provider plugins...
 - Checking for available provider plugins...
-- Downloading plugin for provider "google" (terraform-providers/google) 2.10.0...
-
-The following providers do not have any version constraints in configuration,
-so the latest version was installed.
-
-To prevent automatic upgrades to new major versions that may contain breaking
-changes, it is recommended to add version = "..." constraints to the
-corresponding provider blocks in configuration, with the constraint strings
-suggested below.
-
-* provider.google: version = "~> 2.10"
+- Downloading plugin for provider "google" (hashicorp/google) 3.5.0...
 
 Terraform has been successfully initialized!
 
@@ -335,12 +325,13 @@ wrote some data into the `terraform.tfstate` file. This state file is extremely
 important; it keeps track of Terraform's understanding of the resources it
 created. We recommended that you use source control for the configuration files,
 but the state file should not be stored in source control. You can also [setup
-remote state](https://www.terraform.io/docs/state/remote.html) to store and
-share the state with your teams.
+Terraform
+Cloud](https://learn.hashicorp.com/terraform/cloud-gettingstarted/tfc_overview)
+to store and share the state with your teams.
 
 ## Inspecting State
 
-You can inspect the current state by running `terraform show`:
+You can inspect the current state by running `terraform show`.
 
 ```bash
 terraform show
@@ -874,10 +865,10 @@ lete before activation can occur.] with failed services [compute.googleapis.com]
 
 As the error says, in this case it took a few minutes for the service to be disabled, and the GCP API won't allow us to activate it while this is still going on. If this happens to you, you'll need to wait a few minutes and re-run `terraform apply`.
 
-### Assigning an Elastic IP
+### Assigning a Static IP Address
 
-Now add to your configuration by assigning a static IP to the VM instance.
-Modify the `main.tf` and add the following.
+Now add to your configuration by assigning a static IP to the VM instance in
+`main.tf`.
 
 ```hcl
 resource "google_compute_address" "vm_static_ip" {
@@ -1157,7 +1148,6 @@ terraform apply
 ```raw
 google_compute_network.vpc_network: Refreshing state... [id=terraform-network]
 google_compute_address.vm_static_ip: Refreshing state... [id=hc-training-test/us-central1/terraform-static-ip]
-google_storage_bucket.example_bucket: Refreshing state... [id=example-bucket-robin-jul-9-2019]
 google_compute_instance.another_instance: Refreshing state... [id=terraform-instance-2]
 google_compute_instance.vm_instance: Refreshing state... [id=terraform-instance]
 
@@ -1295,6 +1285,8 @@ variables.
 
 ```hcl
 provider "google" {
+  version = "3.5.0"
+
   project = var.project
   region  = var.region
   zone    = var.zone
@@ -2198,6 +2190,9 @@ module.network.google_compute_network.network: Destruction complete after 36s
 
 Destroy complete! Resources: 5 destroyed.
 ```
+
+After you respond to the prompt with `yes`, Terraform will remove all of the
+infrastructure managed by your configuration.
 
 ## Next Steps
 
