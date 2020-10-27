@@ -804,7 +804,7 @@ dependency graph to determine the correct order of operations. In more
 complicated cases with multiple resources, Terraform will perform operations in
 parallel when it's safe to do so.
 
-## Resource Dependancies
+## Resource Dependencies
 
 Most resources work with other parts of your infrastructure, either by being
 dependent on other resources to function, such as an instance requiring a
