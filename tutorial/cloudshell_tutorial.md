@@ -190,20 +190,26 @@ An execution plan has been generated and is shown below.
 Resource actions are indicated with the following symbols:
   + create
 Terraform will perform the following actions:
-  # google_project_services.project_services will be created
-  + resource "google_project_services" "project_services" {
+  # google_project_service.service["compute.googleapis.com"] will be created
+  + resource "google_project_service" "service" {
       + disable_on_destroy = true
       + id                 = (known after apply)
       + project            = "just-center-247116"
-      + services           = [
-          + "compute.googleapis.com",
-        ]
+      + service            = "compute.googleapis.com"
     }
-Plan: 1 to add, 0 to change, 0 to destroy.
+  # google_project_service.service["oslogin.googleapis.com"] will be created
+  + resource "google_project_service" "service" {
+      + disable_on_destroy = true
+      + id                 = (known after apply)
+      + project            = "just-center-247116"
+      + service            = "oslogin.googleapis.com"
+    }
+Plan: 2 to add, 0 to change, 0 to destroy.
 Do you want to perform these actions?
   Terraform will perform the actions described above.
   Only 'yes' will be accepted to approve.
-  Enter a value:
+
+
 ```
 
 Respond with `yes`. When you do, you should see further output like this:
@@ -214,9 +220,13 @@ Do you want to perform these actions?
   Terraform will perform the actions described above.
   Only 'yes' will be accepted to approve.
   Enter a value: yes
-google_project_services.project_services: Creating...
-google_project_services.project_services: Creation complete after 7s [id=just-center-247116]
-Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+google_project_service.service["oslogin.googleapis.com"]: Creating...
+google_project_service.service["compute.googleapis.com"]: Creating...
+google_project_service.service["oslogin.googleapis.com"]: Still creating... [10s elapsed]
+google_project_service.service["compute.googleapis.com"]: Still creating... [10s elapsed]
+google_project_service.service["oslogin.googleapis.com"]: Creation complete after 15s [id=just-center-247116/oslogin.googleapis.com]
+google_project_service.service["compute.googleapis.com"]: Creation complete after 15s [id=just-center-247116/compute.googleapis.com]
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
 ```
 
 Adding this resource is the equivalent of navigating to the appropriate page in
