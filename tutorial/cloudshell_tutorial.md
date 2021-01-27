@@ -352,21 +352,25 @@ terraform show
 resource "google_compute_network" "vpc_network" {
     auto_create_subnetworks         = true
     delete_default_routes_on_create = false
-    id                              = "terraform-network"
+    id                              = "projects/just-center-247116/global/networks/terraform-network"
     name                            = "terraform-network"
     project                         = "just-center-247116"
     routing_mode                    = "REGIONAL"
     self_link                       = "https://www.googleapis.com/compute/v1/projects/just-center-247116/global/networks/terraform-network"
 }
-# google_project_services.project_services:
-resource "google_project_services" "project_services" {
+# google_project_service.service["compute.googleapis.com"]:
+resource "google_project_service" "service" {
     disable_on_destroy = true
-    id                 = "just-center-247116"
+    id                 = "just-center-247116/compute.googleapis.com"
     project            = "just-center-247116"
-    services           = [
-        "compute.googleapis.com",
-        "oslogin.googleapis.com",
-    ]
+    service            = "compute.googleapis.com"
+}
+# google_project_service.service["oslogin.googleapis.com"]:
+resource "google_project_service" "service" {
+    disable_on_destroy = true
+    id                 = "just-center-247116/oslogin.googleapis.com"
+    project            = "just-center-247116"
+    service            = "oslogin.googleapis.com"
 }
 ```
 
