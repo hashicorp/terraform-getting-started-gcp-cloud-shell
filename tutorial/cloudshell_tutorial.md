@@ -162,9 +162,13 @@ documentation](https://www.terraform.io/docs/providers/google/r/google_project_s
 Add the following to your main.tf file:
 
 ```hcl
-resource "google_project_services" "project_services" {
+resource "google_project_service" "service" {
   project  = "{{project-id}}"
-  services = ["compute.googleapis.com", "oslogin.googleapis.com"]
+  for_each = toset([
+    "compute.googleapis.com",
+    "oslogin.googleapis.com",
+  ])
+  service = each.key
 }
 ```
 
