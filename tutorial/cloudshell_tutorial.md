@@ -245,7 +245,8 @@ the following to your `main.tf` file:
 resource "google_compute_network" "vpc_network" {
   name = "terraform-network"
   depends_on = [google_project_service.service]  
-}```
+}
+```
 
 This is an example of a more common use for resources. We'll use this network
 for resources we create later in this guide.
