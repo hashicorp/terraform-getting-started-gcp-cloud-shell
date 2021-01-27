@@ -19,7 +19,7 @@ building blocks for more complex configurations.
 
 This guide uses Google Cloud Shell to give you an environment preconfigured with Terraform. You can run commands at the command prompt, and edit the files in the editor window.
 
-If you'd prefer to follow this tutorial on your local machine, you can follow [this guide on learn.hashicorp.com](https://learn.hashicorp.com/terraform/gcp/intro).
+If you'd prefer to follow this tutorial on your local machine, you can follow [this guide on learn.hashicorp.com](https://learn.hashicorp.com/collections/terraform/gcp-get-started).
 
 ## Installing Terraform
 
