@@ -244,9 +244,8 @@ the following to your `main.tf` file:
 ```hcl
 resource "google_compute_network" "vpc_network" {
   name = "terraform-network"
-  depends_on = [google_project_services.project_services]  
-}
-```
+  depends_on = [google_project_service.service]  
+}```
 
 This is an example of a more common use for resources. We'll use this network
 for resources we create later in this guide.
@@ -318,15 +317,12 @@ to be created successfully:
 ```raw
 # ...
   Enter a value: yes
-
 google_compute_network.vpc_network: Creating...
 google_compute_network.vpc_network: Still creating... [10s elapsed]
 google_compute_network.vpc_network: Still creating... [20s elapsed]
 google_compute_network.vpc_network: Still creating... [30s elapsed]
 google_compute_network.vpc_network: Still creating... [40s elapsed]
-google_compute_network.vpc_network: Still creating... [50s elapsed]
-google_compute_network.vpc_network: Creation complete after 58s [id=terraform-network]
-
+google_compute_network.vpc_network: Creation complete after 46s [id=projects/just-center-247116/global/networks/terraform-network]
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 ```
 
