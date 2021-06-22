@@ -19,7 +19,7 @@ building blocks for more complex configurations.
 
 This guide uses Google Cloud Shell to give you an environment preconfigured with Terraform. You can run commands at the command prompt, and edit the files in the editor window.
 
-If you'd prefer to follow this tutorial on your local machine, you can follow [this guide on learn.hashicorp.com](https://learn.hashicorp.com/terraform/gcp/intro).
+If you'd prefer to follow this tutorial on your local machine, you can follow [this guide on learn.hashicorp.com](https://learn.hashicorp.com/collections/terraform/gcp-get-started).
 
 ## Installing Terraform
 
@@ -162,9 +162,13 @@ documentation](https://www.terraform.io/docs/providers/google/r/google_project_s
 Add the following to your main.tf file:
 
 ```hcl
-resource "google_project_services" "project_services" {
+resource "google_project_service" "service" {
   project  = "{{project-id}}"
-  services = ["compute.googleapis.com", "oslogin.googleapis.com"]
+  for_each = toset([
+    "compute.googleapis.com",
+    "oslogin.googleapis.com",
+  ])
+  service = each.key
 }
 ```
 
@@ -186,20 +190,26 @@ An execution plan has been generated and is shown below.
 Resource actions are indicated with the following symbols:
   + create
 Terraform will perform the following actions:
-  # google_project_services.project_services will be created
-  + resource "google_project_services" "project_services" {
+  # google_project_service.service["compute.googleapis.com"] will be created
+  + resource "google_project_service" "service" {
       + disable_on_destroy = true
       + id                 = (known after apply)
       + project            = "just-center-247116"
-      + services           = [
-          + "compute.googleapis.com",
-        ]
+      + service            = "compute.googleapis.com"
     }
-Plan: 1 to add, 0 to change, 0 to destroy.
+  # google_project_service.service["oslogin.googleapis.com"] will be created
+  + resource "google_project_service" "service" {
+      + disable_on_destroy = true
+      + id                 = (known after apply)
+      + project            = "just-center-247116"
+      + service            = "oslogin.googleapis.com"
+    }
+Plan: 2 to add, 0 to change, 0 to destroy.
 Do you want to perform these actions?
   Terraform will perform the actions described above.
   Only 'yes' will be accepted to approve.
-  Enter a value:
+
+
 ```
 
 Respond with `yes`. When you do, you should see further output like this:
@@ -210,9 +220,13 @@ Do you want to perform these actions?
   Terraform will perform the actions described above.
   Only 'yes' will be accepted to approve.
   Enter a value: yes
-google_project_services.project_services: Creating...
-google_project_services.project_services: Creation complete after 7s [id=just-center-247116]
-Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+google_project_service.service["oslogin.googleapis.com"]: Creating...
+google_project_service.service["compute.googleapis.com"]: Creating...
+google_project_service.service["oslogin.googleapis.com"]: Still creating... [10s elapsed]
+google_project_service.service["compute.googleapis.com"]: Still creating... [10s elapsed]
+google_project_service.service["oslogin.googleapis.com"]: Creation complete after 15s [id=just-center-247116/oslogin.googleapis.com]
+google_project_service.service["compute.googleapis.com"]: Creation complete after 15s [id=just-center-247116/compute.googleapis.com]
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
 ```
 
 Adding this resource is the equivalent of navigating to the appropriate page in
@@ -230,7 +244,7 @@ the following to your `main.tf` file:
 ```hcl
 resource "google_compute_network" "vpc_network" {
   name = "terraform-network"
-  depends_on = [google_project_services.project_services]  
+  depends_on = [google_project_service.service]  
 }
 ```
 
@@ -304,15 +318,12 @@ to be created successfully:
 ```raw
 # ...
   Enter a value: yes
-
 google_compute_network.vpc_network: Creating...
 google_compute_network.vpc_network: Still creating... [10s elapsed]
 google_compute_network.vpc_network: Still creating... [20s elapsed]
 google_compute_network.vpc_network: Still creating... [30s elapsed]
 google_compute_network.vpc_network: Still creating... [40s elapsed]
-google_compute_network.vpc_network: Still creating... [50s elapsed]
-google_compute_network.vpc_network: Creation complete after 58s [id=terraform-network]
-
+google_compute_network.vpc_network: Creation complete after 46s [id=projects/just-center-247116/global/networks/terraform-network]
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 ```
 
@@ -342,21 +353,25 @@ terraform show
 resource "google_compute_network" "vpc_network" {
     auto_create_subnetworks         = true
     delete_default_routes_on_create = false
-    id                              = "terraform-network"
+    id                              = "projects/just-center-247116/global/networks/terraform-network"
     name                            = "terraform-network"
     project                         = "just-center-247116"
     routing_mode                    = "REGIONAL"
     self_link                       = "https://www.googleapis.com/compute/v1/projects/just-center-247116/global/networks/terraform-network"
 }
-# google_project_services.project_services:
-resource "google_project_services" "project_services" {
+# google_project_service.service["compute.googleapis.com"]:
+resource "google_project_service" "service" {
     disable_on_destroy = true
-    id                 = "just-center-247116"
+    id                 = "just-center-247116/compute.googleapis.com"
     project            = "just-center-247116"
-    services           = [
-        "compute.googleapis.com",
-        "oslogin.googleapis.com",
-    ]
+    service            = "compute.googleapis.com"
+}
+# google_project_service.service["oslogin.googleapis.com"]:
+resource "google_project_service" "service" {
+    disable_on_destroy = true
+    id                 = "just-center-247116/oslogin.googleapis.com"
+    project            = "just-center-247116"
+    service            = "oslogin.googleapis.com"
 }
 ```
 
