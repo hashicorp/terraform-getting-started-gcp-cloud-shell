@@ -82,9 +82,7 @@ configuration you will use for this tutorial.
 Terraform loads all files ending in `.tf` or `.tf.json` in the working
 directory.
 
-Inside of the `tutorial` directory you will find a file named `main.tf`.
-
-<walkthrough-editor-open-file filePath="terraform-getting-started-gcp-cloud-shell/tutorial/main.tf">main.tf</walkthrough-editor-open-file>
+Inside of the `tutorial` directory you will find a file named <walkthrough-editor-open-file filePath="terraform-getting-started-gcp-cloud-shell/tutorial/main.tf">main.tf</walkthrough-editor-open-file>.
 
 Open `main.tf` in the Cloud Shell editor, and paste in the configuration below.
 
@@ -158,7 +156,7 @@ resources from different providers.
 ### Project Services Module
 
 In this tutorial, you will be using the Google Compute Engine service to
-provision your network and instance. You also need to enable the "OS Login"
+provision your network and instance. You also need to enable the OS Login
 service for authentication. You must enable these services for your project
 before you can use them. This example configuration uses a module to manage your
 project services. You can learn more about how this module works from the
@@ -252,15 +250,14 @@ Success! The configuration is valid.
 ### Apply Configuration
 
 Apply the configuration now with the `terraform apply` command. Terraform will
-print output similar to what is shown below. We have truncated some of the
-output for brevity.
+print output similar to what is shown below.
+
+**Note:** Google Cloud Shell may prompt you to authorize this action before you
+  can continue with the tutorial. Do so now.
 
 ```bash
 terraform apply
 ```
-
-**Note:** Google Cloud Shell may prompt you to authorize this action before you
-  can continue with the tutorial. Do so now.
 
 Terraform will print output similar to what is shown below.
 
@@ -314,7 +311,8 @@ Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
 ## Create infrastructure
 
 Now create your first infrastructure, a Virtual Private Cloud (VPC) network that
-will contain the rest of the infrastructure for this tutorial.
+will contain the rest of the infrastructure for this tutorial. Add the following
+to `main.tf`.
 
 ```hcl
 resource "google_compute_network" "vpc_network" {
@@ -350,9 +348,6 @@ output for brevity.
 ```bash
 terraform apply
 ```
-
-**Note:** Google Cloud Shell may prompt you to authorize this action before you
-  can continue with the tutorial. Do so now.
 
 Terraform will print output similar to what is shown below. We have truncated
 some of the output for brevity.
@@ -435,7 +430,7 @@ The Terraform state file is the only way Terraform can track which resources it
 manages, and often contains sensitive information, so you must store your state
 file securely and distribute it only to trusted team members who need to manage
 your infrastructure. In production, we recommend [storing your state
-remotely](/tutorials/terraform/cloud-migrate?in=terraform/cloud) with Terraform
+remotely](https://learn.hashicorp.com/tutorials/terraform/cloud-migrate?in=terraform/cloud) with Terraform
 Cloud or Terraform Enterprise. Terraform also supports several other [remote
 backends](https://www.terraform.io/docs/language/settings/backends/index.html)
 you can use to store and manage your state.
@@ -671,7 +666,9 @@ resources.
 
 Add a `tags` argument to your `vm_instance` resource block.
 
-**Tip:** The below snippet is formatted as a diff to give you context about what in your configuration should change. Add the content in green (exclude the leading `+` sign).
+**Tip:** The below snippet is formatted as a diff to give you context about what
+in your configuration should change. Add the tags attribute as shown below
+(exclude the leading `+` sign).
 
 ```diff
  resource "google_compute_instance" "vm_instance" {
@@ -740,8 +737,8 @@ Edit the `boot_disk` block inside the `vm_instance` resource in your
 configuration file to change the image parameter as follows.
 
 **Tip:** The below snippet is formatted as a diff to give you context about what
-  in your configuration should change. Replace the content displayed in red with
-  the content displayed in green (exclude the leading `+` and `-` signs).
+  in your configuration should change. Replace the old value (indicated with a `-`) with
+  the new value (indicated with a `+`).
 
 ```diff hideClipboard
    boot_disk {
@@ -1069,8 +1066,6 @@ include variables to make your configuration more dynamic and flexible.
 
 Edit the file called `variables.tf` to add the following variable definitions.
 
-<walkthrough-editor-open-file filePath="terraform-getting-started-gcp-cloud-shell/tutorial/variables.tf">variables.tf</walkthrough-editor-open-file>
-
 ```hcl
 variable "project" { }
 
@@ -1095,7 +1090,7 @@ variable is optional. Otherwise, the variable is required. If you run `terraform
 plan` now, Terraform will prompt you for the values for `project` and
 `credentials_file`.
 
-## Use variables in configuration
+### Use variables in configuration
 
 Next, update the GCP provider configuration in `main.tf` to use these new
 variables.
@@ -1112,7 +1107,7 @@ provider "google" {
 
 Variables are referenced with the `var.` prefix.
 
-## Assign values to your variables.
+### Assign values to your variables
 
 You can populate variables using values from a file. Terraform automatically
 loads files called `terraform.tfvars` or matching `*.auto.tfvars` in the working
@@ -1120,15 +1115,13 @@ directory when running operations.
 
 Edit the file called `terraform.tfvars` and copy and paste the value below.
 
-<walkthrough-editor-open-file filePath="terraform-getting-started-gcp-cloud-shell/tutorial/terraform.tfvars">terraform.tfvars</walkthrough-editor-open-file>
-
 ```hcl
 project = "{{project-id}}"
 ```
 
 Save this file.
 
-## Apply configuration
+### Apply configuration
 
 Now run `terraform apply`.
 
@@ -1145,7 +1138,7 @@ infrastructure.
 
 Terraform supports many ways to use and set variables. To learn more, follow our
 in-depth tutorial, [Customize Terraform Configuration with
-Variables](/tutorials/terraform/variables?in=terraform/configuration-language).
+Variables](https://learn.hashicorp.com/tutorials/terraform/variables?in=terraform/configuration-language).
 
 ## Query Data with Output Variables
 
@@ -1164,15 +1157,13 @@ using the `terraform output` command.
 Define an output for the IP address of the instance that Terraform provisions. Create
 a file called `outputs.tf` with the following contents.
 
-<walkthrough-editor-open-file filePath="terraform-getting-started-gcp-cloud-shell/tutorial/outputs.tf">outputs.tf</walkthrough-editor-open-file>
-
 ```hcl
 output "ip" {
   value = google_compute_instance.vm_instance.network_interface.0.network_ip
 }
 ```
 
-## Inspect outputs
+### Inspect outputs
 
 You must apply this configuration before you can use these output values. Apply
 your configuration now.
@@ -1215,16 +1206,18 @@ ip = "10.128.0.2"
 
 You can use Terraform outputs to connect your Terraform projects with other
 parts of your infrastructure, or with other Terraform projects. To learn more,
-follow our in-depth tutorial, [Output Data from Terraform](/tutorials/terraform/outputs?in=terraform/configuration-language).
+follow our in-depth tutorial, [Output Data from Terraform](https://learn.hashicorp.com/tutorials/terraform/outputs?in=terraform/configuration-language).
 
 ## Destroy your infrastructure
 
 Make sure to run `terraform destroy` to clean up the resources you created in
-these tutorials. When prompted remember to confirm with a `yes`.
+these tutorials.
 
 ```bash
 terraform destroy
 ```
+
+ When prompted remember to confirm with a `yes`.
 
 ## Next steps
 
@@ -1235,13 +1228,13 @@ this knowledge to use to improve building your own infrastructure.
 For more hands-on experience with the Terraform configuration language, or to
 learn more of the building blocks of Terraform, review the tutorials below.
 
-- [Configuration Language](/collections/terraform/configuration-language) - Get more familiar with variables, outputs, dependencies, meta-arguments, and other language features to write more sophisticated Terraform configurations.
+- [Configuration Language](https://learn.hashicorp.com/collections/terraform/configuration-language) - Get more familiar with variables, outputs, dependencies, meta-arguments, and other language features to write more sophisticated Terraform configurations.
 
-- [Modules](/tutorials/terraform/module) - Organize and re-use Terraform configuration with modules.
+- [Modules](https://learn.hashicorp.com/tutorials/terraform/module) - Organize and re-use Terraform configuration with modules.
 
-- [Provision](/collections/terraform/provision) - Use Packer or Cloud-init to automatically provision SSH keys and a web server onto a Linux VM created by Terraform in AWS.
+- [Provision](https://learn.hashicorp.com/collections/terraform/provision) - Use Packer or Cloud-init to automatically provision SSH keys and a web server onto a Linux VM created by Terraform in AWS.
 
-- [Import](/tutorials/terraform/state-import) - Import existing infrastructure into Terraform.
+- [Import](https://learn.hashicorp.com/tutorials/terraform/state-import) - Import existing infrastructure into Terraform.
 
 To read more about available configuration options, explore the [Terraform documentation](https://www.terraform.io/docs/index.html).
 
@@ -1257,4 +1250,4 @@ environment. It supports two main workflows for performing Terraform runs:
   upload configurations directly.
 
 For a hands-on introduction to the Terraform Cloud VCS-driven workflow, [follow the Terraform Cloud
-getting started tutorials](/collections/terraform/cloud-get-started). Terraform Cloud also offers [commercial solutions](https://www.hashicorp.com/products/terraform/pricing) which include team permission management, policy enforcement, agents, and more.
+getting started tutorials](https://learn.hashicorp.com/collections/terraform/cloud-get-started). Terraform Cloud also offers [commercial solutions](https://www.hashicorp.com/products/terraform/pricing) which include team permission management, policy enforcement, agents, and more.
