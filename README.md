@@ -3,16 +3,14 @@
 A Getting Started Tutorial for Terraform and Google Cloud Platform, using
 Google's interactive [Cloud Shell](https://cloud.google.com/shell/).
 
-## Purpose
-
 This tutorial will help you learn how to use
 [Terraform](https://www.terraform.io/intro/index.html "Introduction to
-Terraform"), an open source "Infrastructure as Code" tool provided by HashiCorp.
+Terraform"), an open source Infrastructure as Code tool.
 
 Since this tutorial uses Google Cloud Platform (GCP), this tutorial assumes 
 you know basic GCP concepts and terminology.
 
-## Using
+## Launch the Tutorial
 
 To follow this tutorial, you will need a Google Cloud Platform (GCP) account. If
 you do not have a GCP account, [create one
@@ -31,15 +29,25 @@ This tutorial works with the image used above. However, the version of Terraform
 ### Build the Docker Image
 
 1. Set up docker and the gcloud command line utility as described in the "Before you begin" section of the [GCP Container Registry Quickstart](https://cloud.google.com/container-registry/docs/quickstart "Container Registry Quickstart Documentation").
-1. Run: `docker build . -t terraform-gcp-gsg:v$(date "+%Y-%m-%d")`
+1. Run:
+    ```sh
+    docker build . -t terraform-gcp-gsg:v$(date "+%Y-%m-%d")
+    ```
 1. Optionally, inspect/test image - for example:
-  `docker run -it --entrypoint /bin/sh terraform-gcp-gsg:v$(date "+%Y-%m-%d")`
+    ```sh
+    docker run -it --entrypoint /bin/sh terraform-gcp-gsg:v$(date "+%Y-%m-%d")
+    ```
 
 ### Deploy Docker Image the GCP Image Registry
 
 1. Make sure docker is configured to authenticate with gcloud:
-  - `gcloud auth configure-docker`
-1. `docker tag terraform-gcp-gsg:v$(date "+%Y-%m-%d") gcr.io/[PROJECT-ID]/terraform-gcp-gsg:v$(date "+%Y-%m-%d")`
+    ```sh
+    gcloud auth configure-docker
+    ```
+1. Tag the image:
+    ```sh
+    docker tag terraform-gcp-gsg:v$(date "+%Y-%m-%d") gcr.io/[PROJECT-ID]/terraform-gcp-gsg:v$(date "+%Y-%m-%d")
+    ```
 
 ### Use the Docker Image with Cloud Shell
 
