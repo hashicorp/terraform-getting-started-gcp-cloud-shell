@@ -9,9 +9,8 @@ This tutorial will help you learn how to use
 [Terraform](https://www.terraform.io/intro/index.html "Introduction to
 Terraform"), an open source "Infrastructure as Code" tool provided by HashiCorp.
 
-Since this tutorial will be using Google Cloud Platform (GCP), it's designed for
-those with some experience GCP. While no specialized GCP knowledge is required,
-the guide assumes knowledge of basic GCP concepts and terminology.
+Since this tutorial uses Google Cloud Platform (GCP), this tutorial assumes 
+you know basic GCP concepts and terminology.
 
 ## Using
 
