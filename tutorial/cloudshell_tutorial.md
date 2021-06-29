@@ -243,6 +243,8 @@ so Terraform will return a success message.
 terraform validate
 ```
 
+Terraform will confirm that the configuration is valid. 
+
 ```raw
 Success! The configuration is valid.
 ```
