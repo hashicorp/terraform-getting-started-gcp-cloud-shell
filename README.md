@@ -1,4 +1,4 @@
-# Terraform GSG on GCP with Cloud Shell
+# Terraform Getting Started Guide on GCP with Cloud Shell
 
 A Getting Started Tutorial for Terraform and Google Cloud Platform, using
 Google's interactive [Cloud Shell](https://cloud.google.com/shell/).
@@ -29,11 +29,11 @@ This tutorial works with the image used above. However, the version of Terraform
 ### Build the Docker Image
 
 1. Set up docker and the gcloud command line utility as described in the "Before you begin" section of the [GCP Container Registry Quickstart](https://cloud.google.com/container-registry/docs/quickstart "Container Registry Quickstart Documentation").
-1. Run:
+1. Build the image:
     ```sh
     docker build . -t terraform-gcp-gsg:v$(date "+%Y-%m-%d")
     ```
-1. Optionally, inspect/test image - for example:
+1. Optionally, inspect/test image locally:
     ```sh
     docker run -it --entrypoint /bin/sh terraform-gcp-gsg:v$(date "+%Y-%m-%d")
     ```
