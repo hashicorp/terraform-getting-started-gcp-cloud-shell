@@ -443,6 +443,8 @@ Inspect the current state using `terraform show`.
 terraform show
 ```
 
+Terraform will print output similar to the following.
+
 ```raw
 # module.project_services.google_project_service.project_services[0]:
 resource "google_project_service" "project_services" {
@@ -556,7 +558,7 @@ Now run `terraform apply` to create the compute instance.
 terraform apply
 ```
 
- Terraform will prompt you to confirm the operation.
+Terraform will prompt you to confirm the operation.
 
 ```raw
 google_compute_network.vpc_network: Refreshing state... [id=projects/rln-gcp-test-01/global/networks/terraform-network]
@@ -687,6 +689,8 @@ Run `terraform apply` again.
 terraform apply
 ```
 
+Terraform will print output similar to the following.
+
 ```raw
 module.project_services.google_project_service.project_services[1]: Refreshing state... [id=rln-gcp-test-01/oslogin.googleapis.com]
 google_compute_network.vpc_network: Refreshing state... [id=projects/rln-gcp-test-01/global/networks/terraform-network]
@@ -761,6 +765,8 @@ running instance.
 ```bash
 terraform apply
 ```
+
+Terraform will print output similar to the following.
 
 ```raw
 module.project_services.google_project_service.project_services[1]: Refreshing state... [id=rln-gcp-test-01/oslogin.googleapis.com]
@@ -905,6 +911,7 @@ project.
 ```bash
 terraform destroy
 ```
+
 As with apply, Terraform shows its execution plan and waits for approval before
 making any changes.
 
@@ -1202,6 +1209,8 @@ Now query the outputs with the `terraform output` command.
 terraform output
 ```
 
+Terraform will print output similar to the following.
+
 ```raw
 ip = "10.128.0.2"
 ```
@@ -1219,7 +1228,7 @@ these tutorials.
 terraform destroy
 ```
 
- When prompted remember to confirm with a `yes`.
+When prompted remember to confirm with a `yes`.
 
 ## Next steps
 
