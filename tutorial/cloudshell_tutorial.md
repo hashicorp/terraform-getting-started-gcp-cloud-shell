@@ -260,7 +260,7 @@ print output similar to what is shown below.
 terraform apply
 ```
 
-Terraform will print output similar to what is shown below.
+Terraform returns output similar to to the output below.
 
 ```raw
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the
