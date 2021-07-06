@@ -57,8 +57,8 @@ After you have created the project, select it below.
 
 <walkthrough-project-billing-setup></walkthrough-project-billing-setup>
 
-Selecting the project here will set the project ID in future steps, so be sure
-to select a project before moving on!
+Selecting the project here will set the project ID in future steps, so 
+select a project before moving on!
 
 #### Authentication
 
