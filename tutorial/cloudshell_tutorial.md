@@ -901,7 +901,7 @@ can destroy or recreate the resources it manages.
 ### Destroy
 
 The `terraform destroy` command terminates resources managed by your Terraform
-project. This command is the inverse of `terraform apply` in that it terminates
+project. This command terminates
 all the resources specified in your Terraform state. It does _not_ destroy
 resources running elsewhere that are not managed by the current Terraform
 project.
