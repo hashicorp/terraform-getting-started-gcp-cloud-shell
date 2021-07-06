@@ -260,7 +260,7 @@ print output similar to what is shown below.
 terraform apply
 ```
 
-Terraform will print output similar to what is shown below.
+Terraform returns output similar to to the output below.
 
 ```raw
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the
@@ -332,7 +332,7 @@ example configuration, Terraform manages the `google_compute_network` resource w
 for the resource. For example, the ID for your network is
 `google_compute_network.vpc_network`.
 
-Resource blocks contain arguments which you use to configure the resource.
+Resource blocks contain arguments to configure the resource.
 Arguments can include things like machine sizes, disk image names, or VPC IDs.
 The [Terraform Registry GCP documentation page](https://registry.terraform.io/providers/hashicorp/google/latest/docs) documents the required and optional arguments for each GCP resource. For example, you can read the [`google_compute_network`](https://www.terraform.io/docs/providers/google/r/compute_network.html) documentation to view the resource's supported arguments and available attributes.
 
@@ -385,7 +385,7 @@ Do you want to perform these actions?
   Enter a value:
 ```
 
-Terraform will indicate what infrastructure changes it plans to make, and prompt
+Terraform returns the planned infrastructure changes, and prompts
 for your approval before it makes those changes.
 
 This output shows the _execution plan_, describing which actions Terraform will
@@ -416,7 +416,7 @@ google_compute_network.vpc_network: Creation complete after 42s [id=projects/rln
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 ```
 
-You have now created infrastructure using Terraform! Visit the GCP console to
+You created GCP infrastructure using Terraform! Visit the GCP console to
 see the network you provisioned. Make sure you are looking at the same
 region and project that you configured in the provider configuration.
 
@@ -427,8 +427,7 @@ When you applied your configuration, Terraform wrote data into a file called
 manages in this file, so that it can update or destroy those resources going
 forward.
 
-The Terraform state file is the only way Terraform can track which resources it
-manages, and often contains sensitive information, so you must store your state
+Terraform tracks resources with the Terraform state file. The state file often contains sensitive information, so you must store your state
 file securely and distribute it only to trusted team members who need to manage
 your infrastructure. In production, we recommend [storing your state
 remotely](https://learn.hashicorp.com/tutorials/terraform/cloud-migrate?in=terraform/cloud) with Terraform
