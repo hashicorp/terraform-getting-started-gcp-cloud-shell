@@ -123,7 +123,7 @@ module "project_services" {
 This is a complete configuration that Terraform can apply. In the following
 sections you will review each block of the configuration in more detail.
 
-Cloud Shell automatically set the `project` and `project_id` attributes to the one you selected
+Cloud Shell automatically sets the `project_id` attribute to the one you selected
 in the previous step. You can review a list of your projects in the [cloud
 resource manager](https://console.cloud.google.com/cloud-resource-manager)
 
