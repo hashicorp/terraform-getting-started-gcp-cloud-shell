@@ -226,7 +226,7 @@ directory for readability and consistency.
 
 Format your configuration. Terraform will print out the names of the files it
 modified, if any. In this case, your configuration file was already formatted
-correctly, so Terraform won't return any file names.
+correctly, so Terraform will not return any file names.
 
 ```bash
 terraform fmt
