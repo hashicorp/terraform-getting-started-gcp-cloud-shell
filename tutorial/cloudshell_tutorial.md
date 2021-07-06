@@ -416,7 +416,7 @@ google_compute_network.vpc_network: Creation complete after 42s [id=projects/rln
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 ```
 
-You have now created infrastructure using Terraform! Visit the GCP console to
+You created GCP infrastructure using Terraform! Visit the GCP console to
 see the network you provisioned. Make sure you are looking at the same
 region and project that you configured in the provider configuration.
 
