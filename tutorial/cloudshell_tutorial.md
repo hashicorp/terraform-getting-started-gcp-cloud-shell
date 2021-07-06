@@ -25,7 +25,7 @@ with Terraform. You can execute commands at the command prompt, and edit the
 files in the editor window.
 
 If you prefer to follow this tutorial on your local machine, you can follow
-[this collection on
+the [Google Cloud collection on
 learn.hashicorp.com](https://learn.hashicorp.com/collections/terraform/gcp-get-started).
 
 ## Prerequisites
