@@ -658,7 +658,7 @@ google_compute_instance.vm_instance: Creation complete after 19s [id=projects/rl
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 ```
 
-This is a fairly straightforward change — you added a `google_compute_instance`
+With this change you added a `google_compute_instance`
 resource named `vm_instance` to the configuration, and Terraform created the
 resource in GCP.
 
