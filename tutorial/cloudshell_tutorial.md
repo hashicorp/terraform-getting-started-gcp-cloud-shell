@@ -890,8 +890,7 @@ again to see the new values associated with this instance.
 
 ## Destroy Infrastructure
 
-You have created and modified infrastructure using Terraform. You will now learn
-how to destroy your Terraform-managed infrastructure.
+You have created and modified infrastructure using Terraform. You will now destroy your Terraform-managed infrastructure.
 
 Once you no longer need infrastructure, you might want to destroy it to reduce
 your security exposure and costs. For example, you may remove a production
