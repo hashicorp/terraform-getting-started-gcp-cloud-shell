@@ -44,7 +44,7 @@ This tutorial works with the image used above. However, the version of Terraform
     ```sh
     gcloud auth configure-docker
     ```
-1. Tag the image:
+1. Tag the image, replacing `[PROJECT-ID]` with your Google Cloud's project ID:
     ```sh
     docker tag terraform-gcp-gsg:v$(date "+%Y-%m-%d") gcr.io/[PROJECT-ID]/terraform-gcp-gsg:v$(date "+%Y-%m-%d")
     ```
