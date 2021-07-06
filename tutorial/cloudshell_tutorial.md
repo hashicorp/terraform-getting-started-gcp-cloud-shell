@@ -427,8 +427,7 @@ When you applied your configuration, Terraform wrote data into a file called
 manages in this file, so that it can update or destroy those resources going
 forward.
 
-The Terraform state file is the only way Terraform can track which resources it
-manages, and often contains sensitive information, so you must store your state
+Terraform tracks resources with the Terraform state file. The state file often contains sensitive information, so you must store your state
 file securely and distribute it only to trusted team members who need to manage
 your infrastructure. In production, we recommend [storing your state
 remotely](https://learn.hashicorp.com/tutorials/terraform/cloud-migrate?in=terraform/cloud) with Terraform
