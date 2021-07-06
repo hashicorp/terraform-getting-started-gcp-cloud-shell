@@ -332,7 +332,7 @@ example configuration, Terraform manages the `google_compute_network` resource w
 for the resource. For example, the ID for your network is
 `google_compute_network.vpc_network`.
 
-Resource blocks contain arguments which you use to configure the resource.
+Resource blocks contain arguments to configure the resource.
 Arguments can include things like machine sizes, disk image names, or VPC IDs.
 The [Terraform Registry GCP documentation page](https://registry.terraform.io/providers/hashicorp/google/latest/docs) documents the required and optional arguments for each GCP resource. For example, you can read the [`google_compute_network`](https://www.terraform.io/docs/providers/google/r/compute_network.html) documentation to view the resource's supported arguments and available attributes.
 
