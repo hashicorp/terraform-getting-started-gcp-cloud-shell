@@ -385,7 +385,7 @@ Do you want to perform these actions?
   Enter a value:
 ```
 
-Terraform will indicate what infrastructure changes it plans to make, and prompt
+Terraform returns the planned infrastructure changes, and prompts
 for your approval before it makes those changes.
 
 This output shows the _execution plan_, describing which actions Terraform will
