@@ -154,7 +154,7 @@ resources from different providers.
 
 ### Project Services Module
 
-In this tutorial, you will be using the Google Compute Engine service to
+In this tutorial, you will use the Google Compute Engine service to
 provision your network and instance. You also need to enable the OS Login
 service for authentication. You must enable these services for your project
 before you can use them. This example configuration uses a module to manage your
