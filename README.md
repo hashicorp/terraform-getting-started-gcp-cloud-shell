@@ -6,7 +6,7 @@ Google's interactive [Cloud Shell](https://cloud.google.com/shell/).
 This tutorial will help you learn [Terraform](https://www.terraform.io/intro/index.html "Introduction to
 Terraform"), an open source Infrastructure as Code tool.
 
-Since this tutorial uses Google Cloud Platform (GCP), this tutorial assumes 
+This tutorial assumes 
 you know basic GCP concepts and terminology.
 
 ## Launch the Tutorial
