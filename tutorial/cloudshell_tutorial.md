@@ -137,8 +137,8 @@ configuration, the `google` provider's source is defined as `hashicorp/google`,
 which is shorthand for `registry.terraform.io/hashicorp/google`.
 
 You can also define a version constraint for each provider in the
-`required_providers` block. The `version` attribute is optional, but we
-recommend using it to enforce the provider version. Without it, Terraform will
+`required_providers` block. The `version` attribute is optional, but HashCorp
+recommends using it to enforce the provider version. Without it, Terraform will
 always use the latest version of the provider, which may introduce breaking
 changes.
 
