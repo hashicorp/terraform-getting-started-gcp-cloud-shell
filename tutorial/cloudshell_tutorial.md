@@ -72,8 +72,7 @@ documentation](https://registry.terraform.io/providers/hashicorp/google/latest/d
 ## Build Infrastructure
 
 The set of files used to describe infrastructure in Terraform is known as a
-Terraform _configuration_. You will now write your first configuration to create
-a network.
+Terraform _configuration_. Next, you will write your first configuration to create a network.
 
 Each Terraform configuration must be in its own working directory. Your Cloud
 Shell environment includes a directory called `tutorial` that will store the
