@@ -176,7 +176,7 @@ Initialize the directory.
 terraform init
 ```
 
-Terraform will print output similar to the following.
+Terraform returns output similar to the following.
 
 ```raw
 Initializing modules...
