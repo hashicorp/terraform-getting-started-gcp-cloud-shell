@@ -765,7 +765,7 @@ running instance.
 terraform apply
 ```
 
-Terraform will print output similar to the following.
+Terraform will print output similar to the following:
 
 ```raw
 module.project_services.google_project_service.project_services[1]: Refreshing state... [id=rln-gcp-test-01/oslogin.googleapis.com]
