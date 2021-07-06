@@ -22,7 +22,7 @@ You can follow this guide from within Google's Cloud Shell starting with [this l
 
 You will be prompted to trust this image. Answer "Yes".
 
-## Use a Custome Image
+## Use a Custom Image
 
 This tutorial works with the image used above. However, the version of Terraform included in that image may not be the latest version. You can build a Docker image with the latest version instead if you prefer.
 
