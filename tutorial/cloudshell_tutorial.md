@@ -1090,7 +1090,7 @@ variable "zone" {
   organize and understand.
 
 This file defines three variables within your Terraform configuration. The
-`project` and `credentials_file` variables have an empty block: `{ }`. The
+`project` variable has an empty block: `{ }`. The
 `region` and `zone` variables set defaults. If a default value is set, the
 variable is optional. Otherwise, the variable is required. If you run `terraform
 plan` now, Terraform will prompt you for the values for `project` and
