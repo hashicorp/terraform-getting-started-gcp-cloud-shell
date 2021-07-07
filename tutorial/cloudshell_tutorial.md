@@ -1160,8 +1160,7 @@ using the `terraform output` command.
 
 ### Define Outputs
 
-Define an output for the IP address of the instance that Terraform provisions. Create
-a file called `outputs.tf` with the following contents.
+Define an output for the IP address of the instance that Terraform provisions. Add the following configuration to the `outputs.tf` file.
 
 ```hcl
 output "ip" {
