@@ -887,7 +887,7 @@ As indicated by the execution plan, Terraform first destroyed the existing
 instance and then created a new one in its place. You can use `terraform show`
 again to see the new values associated with this instance.
 
-## Destroy Infrastructure
+## Destroy infrastructure
 
 You have created and modified infrastructure using Terraform. You will now destroy your Terraform-managed infrastructure.
 
