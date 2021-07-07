@@ -1089,7 +1089,7 @@ variable "zone" {
   defining variables in their own file to make your configuration easier to
   organize and understand.
 
-This file defines four variables within your Terraform configuration. The
+This file defines three variables within your Terraform configuration. The
 `project` and `credentials_file` variables have an empty block: `{ }`. The
 `region` and `zone` variables set defaults. If a default value is set, the
 variable is optional. Otherwise, the variable is required. If you run `terraform
