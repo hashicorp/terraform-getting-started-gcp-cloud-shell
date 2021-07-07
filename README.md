@@ -9,7 +9,7 @@ Terraform"), an open source Infrastructure as Code tool.
 This tutorial assumes 
 you know basic GCP concepts and terminology.
 
-## Launch the Tutorial
+## Launch the tutorial
 
 To follow this tutorial, you will need a Google Cloud Platform (GCP) account. If
 you do not have a GCP account, [create one
