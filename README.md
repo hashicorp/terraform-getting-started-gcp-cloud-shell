@@ -27,7 +27,7 @@ This tutorial works with the image used above. However, the version of Terraform
 
 ### Build the Docker Image
 
-1. Set up docker and the gcloud command line utility as described in the "Before you begin" section of the [GCP Container Registry Quickstart](https://cloud.google.com/container-registry/docs/quickstart "Container Registry Quickstart Documentation").
+1. Set up Docker and the gcloud command line utility as described in the "Before you begin" section of the [GCP Container Registry Quickstart](https://cloud.google.com/container-registry/docs/quickstart "Container Registry Quickstart Documentation").
 1. Build the image:
     ```sh
     docker build . -t terraform-gcp-gsg:v$(date "+%Y-%m-%d")
