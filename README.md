@@ -1,6 +1,6 @@
 # Terraform Getting Started Guide on GCP with Cloud Shell
 
-A Getting Started Tutorial for Terraform and Google Cloud Platform, using
+A Getting Started Tutorial for Terraform and Google Cloud Platform (GCP), using
 Google's interactive [Cloud Shell](https://cloud.google.com/shell/).
 
 This tutorial will help you learn [Terraform](https://www.terraform.io/intro/index.html "Introduction to
