@@ -13,8 +13,7 @@ you know basic GCP concepts and terminology.
 
 To follow this tutorial, you will need a Google Cloud Platform account. If
 you do not have a GCP account, [create one
-now](https://console.cloud.google.com/freetrial/). You can complete
-this tutorial using only the services included in the GCP [free
+now](https://console.cloud.google.com/freetrial/). This tutorial uses services included in the GCP [free
 tier](https://cloud.google.com/free/).
 
 You can follow this guide from within Google's Cloud Shell starting with [this link](https://console.cloud.google.com/cloudshell/open?cloudshell_image=gcr.io/graphite-cloud-shell-images/terraform:latest&cloudshell_git_repo=https://github.com/hashicorp/terraform-getting-started-gcp-cloud-shell&cloudshell_git_branch=master&cloudshell_working_dir=tutorial/&open_in_editor=./main.tf&cloudshell_tutorial=./cloudshell_tutorial.md).
