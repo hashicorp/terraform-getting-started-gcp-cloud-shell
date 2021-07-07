@@ -11,7 +11,7 @@ you know basic GCP concepts and terminology.
 
 ## Launch the tutorial
 
-To follow this tutorial, you will need a Google Cloud Platform (GCP) account. If
+To follow this tutorial, you will need a Google Cloud Platform account. If
 you do not have a GCP account, [create one
 now](https://console.cloud.google.com/freetrial/). You can complete
 this tutorial using only the services included in the GCP [free
