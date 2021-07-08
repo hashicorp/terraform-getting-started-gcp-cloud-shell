@@ -24,7 +24,7 @@ When prompted to trust the tutorial image, answer "Yes".
 
 This tutorial uses a Docker image. The version of Terraform included in that image (`v1.0.1`) may not be the latest version. To build and use a Docker image with the latest version see the instructions below.
 
-### Build the Docker Image
+### Build the Docker image
 
 1. Set up Docker and the gcloud command line utility as described in the "Before you begin" section of the [GCP Container Registry Quickstart](https://cloud.google.com/container-registry/docs/quickstart "Container Registry Quickstart Documentation").
 1. Build the image:
