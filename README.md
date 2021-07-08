@@ -18,7 +18,7 @@ tier](https://cloud.google.com/free/).
 
 Complete this tutorial in [Google's Cloud Shell](https://console.cloud.google.com/cloudshell/open?cloudshell_image=gcr.io/graphite-cloud-shell-images/terraform:latest&cloudshell_git_repo=https://github.com/hashicorp/terraform-getting-started-gcp-cloud-shell&cloudshell_git_branch=master&cloudshell_working_dir=tutorial/&open_in_editor=./main.tf&cloudshell_tutorial=./cloudshell_tutorial.md).
 
-You will be prompted to trust this image. Answer "Yes".
+When prompted to trust the tutorial image, answer "Yes".
 
 ## Use a custom image
 
