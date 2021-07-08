@@ -47,7 +47,7 @@ This tutorial uses a Docker image. The version of Terraform included in that ima
     docker tag terraform-gcp-gsg:v$(date "+%Y-%m-%d") gcr.io/[PROJECT-ID]/terraform-gcp-gsg:v$(date "+%Y-%m-%d")
     ```
 
-### Use the Docker Image with Cloud Shell
+### Use the Docker image with Cloud Shell
 
 1. Update the URL above to use the URL to your new docker image.
 1. You'll be prompted to trust this image. Answer "Yes".
