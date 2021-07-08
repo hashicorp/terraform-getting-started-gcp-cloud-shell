@@ -22,7 +22,7 @@ When prompted to trust the tutorial image, answer "Yes".
 
 ## Use a custom image
 
-This tutorial works with the image used above. However, the version of Terraform included in that image (`v1.0.1`) may not be the latest version. You can build and use a Docker image with the latest version.
+This tutorial uses a Docker image. The version of Terraform included in that image (`v1.0.1`) may not be the latest version. To build and use a Docker image with the latest version see the instructions below.
 
 ### Build the Docker Image
 
