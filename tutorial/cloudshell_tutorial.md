@@ -39,7 +39,7 @@ this by running `terraform version`.
 terraform version
 ```
 
-**Note:** When you run the previous command, Terraform may print a warning that
+**Note:** When you run `terraform version`, Terraform may print a warning that
   there is a newer version of Terraform available. This tutorial has been tested
   with the version of Terraform installed in your Cloud Shell environment, so
   you can continue to use it for the rest of the tutorial.
