@@ -63,7 +63,7 @@ select a project before moving on!
 #### Authentication
 
 When you are using Google Cloud Shell, the shell is already configured with
-access to your GCP credentials, so you will not need to do anything extra to
+access to your GCP credentials, so you will not need to do anything to
 authenticate and start provisioning resources. When using Terraform from another
 environment, you will need to configure authentication. You can read about
 credentials in the [GCP provider
