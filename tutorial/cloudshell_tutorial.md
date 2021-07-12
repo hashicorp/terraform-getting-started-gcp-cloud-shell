@@ -12,7 +12,7 @@ provision, update, and destroy infrastructure using the sample
 configuration provided. The sample configuration provisions a network and a
 Linux virtual machine. You will also learn about remote backends, input and
 output variables, and how to configure resource dependencies. These are the
-building blocks for more complex configurations.
+building blocks for more complex Terraform configurations.
 
 **Warning:** While everything provisioned in this tutorial should fall within
   GCP's free tier, if you provision resources outside of the free tier, you may
