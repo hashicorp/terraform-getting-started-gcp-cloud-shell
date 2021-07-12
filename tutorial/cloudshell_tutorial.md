@@ -49,8 +49,8 @@ terraform version
 In addition to a GCP account, you will need to use a **GCP Project** to follow
 this guide.
 
-In order to keep the resources you will create in this tutorial separate from
-your other resources, we recommend that you create a new project to use
+To keep the resources you create in this tutorial separate from
+your other resources, create a new project to use
 throughout the tutorial.
 
 After you have created the project, select it below.
