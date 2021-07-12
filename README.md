@@ -1,49 +1,53 @@
-# Terraform GSG on GCP with Cloud Shell
+# Terraform Getting Started Guide on GCP with Cloud Shell
 
-A Getting Started Guide for Terraform and Google Cloud Platform, using Google's interactive [Cloud Shell](https://cloud.google.com/shell/ "Google Cloud Shell homepage").
+A Getting Started Tutorial for Terraform and Google Cloud Platform (GCP), using
+Google's interactive [Cloud Shell](https://cloud.google.com/shell/).
 
-## Purpose
+This tutorial will help you learn [Terraform](https://www.terraform.io/intro/index.html "Introduction to
+Terraform"), an open source Infrastructure as Code tool.
 
-This guide will help you learn how to use [Terraform](https://www.terraform.io/intro/index.html "Introduction to Terraform"), an open source "Infrastructure as Code" tool provided by Hashicorp.
+This tutorial assumes 
+you know basic GCP concepts and terminology.
 
-Since this guide will be using Google Cloud Platform (GCP), it's designed for those with some experience GCP. While no specialized GCP knowledge is required, the guide assumes knowledge of basic GCP concepts and terminology.
+## Launch the tutorial
 
-## Using
+To follow this tutorial, you will need a Google Cloud Platform account. If
+you do not have a GCP account, [create one
+now](https://console.cloud.google.com/freetrial/). This tutorial uses services included in the GCP [free
+tier](https://cloud.google.com/free/).
 
-You can follow this guide from within Google's Cloud Shell starting with [this link](https://console.cloud.google.com/cloudshell/open?cloudshell_image=gcr.io/graphite-cloud-shell-images/terraform:latest&cloudshell_git_repo=https://github.com/robin-norwood/terraform-getting-started-gcp-cloud-shell&cloudshell_git_branch=master&cloudshell_working_dir=tutorial/&open_in_editor=./main.tf&cloudshell_tutorial=./cloudshell_tutorial.md)
+Complete this tutorial in [Google's Cloud Shell](https://console.cloud.google.com/cloudshell/open?cloudshell_image=gcr.io/graphite-cloud-shell-images/terraform:latest&cloudshell_git_repo=https://github.com/hashicorp/terraform-getting-started-gcp-cloud-shell&cloudshell_git_branch=master&cloudshell_working_dir=tutorial/&open_in_editor=./main.tf&cloudshell_tutorial=./cloudshell_tutorial.md).
 
-To follow the guide, you'll need an active Google Cloud Platform account.
+When prompted to trust the tutorial image, answer "Yes".
 
-## Code
+## Use a custom image
 
-The source code for this guide is hosted in [this GitHub repository](https://github.com "FIXME: Link to GH repo").
+This tutorial uses a Docker image. The version of Terraform included in that image (`v1.0.1`) may not be the latest version. To build and use a Docker image with the latest version see the instructions below.
 
-## Building
+### Build the Docker image
 
-This tutorial works fine with the image used above. However, the version of Terraform included in that image may not be the latest version. You can build a Docker image with the latest version instead if you prefer.
+1. Set up Docker and the gcloud command line utility as described in the "Before you begin" section of the [GCP Container Registry Quickstart](https://cloud.google.com/container-registry/docs/quickstart "Container Registry Quickstart Documentation").
+1. Build the image:
+    ```sh
+    docker build . -t terraform-gcp-gsg:v$(date "+%Y-%m-%d")
+    ```
+1. Optionally, inspect/test image locally:
+    ```sh
+    docker run -it --entrypoint /bin/sh terraform-gcp-gsg:v$(date "+%Y-%m-%d")
+    ```
 
-### Build the docker image
-
-1. Set up docker and the gcloud command line utility as described in the "Before you begin" section of the [GCP Container Registry Quickstart](https://cloud.google.com/container-registry/docs/quickstart "Container Registry Quickstart Documentation").
-1. Run: `docker build . -t terraform-gcp-gsg:v$(date "+%Y-%m-%d")`
-1. Optionally, inspect/test image - for example:
-  `docker run -it --entrypoint /bin/sh terraform-gcp-gsg:v$(date "+%Y-%m-%d")`
-
-### Deploy docker image to the image registry
+### Deploy Docker Image the GCP Image Registry
 
 1. Make sure docker is configured to authenticate with gcloud:
-  - `gcloud auth configure-docker`
-1. `docker tag terraform-gcp-gsg:v$(date "+%Y-%m-%d") gcr.io/[PROJECT-ID]/terraform-gcp-gsg:v$(date "+%Y-%m-%d")`
+    ```sh
+    gcloud auth configure-docker
+    ```
+1. Tag the image, replacing `[PROJECT-ID]` with your Google Cloud's project ID:
+    ```sh
+    docker tag terraform-gcp-gsg:v$(date "+%Y-%m-%d") gcr.io/[PROJECT-ID]/terraform-gcp-gsg:v$(date "+%Y-%m-%d")
+    ```
 
-### Using the docker image with Cloud Shell
+### Use the Docker image with Cloud Shell
 
 1. Update the URL above to use the URL to your new docker image.
 1. You'll be prompted to trust this image. Answer "Yes".
-
-## Known Issues
-
-1. Networking problems tend to leave the Google Cloud Shell in an odd state, sometimes requiring the user to start over from scratch.
-1. There are some issues with using the `google_project_services` resource, specifically:
-    1. if `oslogin.googleapis.com` isn't included, it gets silently enabled; and shows up as "removed" in subsequent runs.
-    1. If it is included, things work fine until you run `terraform destroy`:
-    Error: Unable to destroy google_project_services for sturdy-mechanic-247714: Error disabling service "oslogin.googleapis.com" for project "sturdy-mechanic-247714": Error waiting for api to disable: Error code 9, message: [Could not turn off service, as it still has resource s in use.] with failed services [compute.googleapis.com]
