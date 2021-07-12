@@ -81,7 +81,7 @@ configuration you will use for this tutorial.
 Terraform loads all files ending in `.tf` or `.tf.json` in the working
 directory.
 
-In the `tutorial` directory you will find a file named <walkthrough-editor-open-file filePath="terraform-getting-started-gcp-cloud-shell/tutorial/main.tf">main.tf</walkthrough-editor-open-file>.
+The `tutorial` directory contains a file named <walkthrough-editor-open-file filePath="terraform-getting-started-gcp-cloud-shell/tutorial/main.tf">main.tf</walkthrough-editor-open-file>.
 
 Open `main.tf` in the Cloud Shell editor, and paste in the configuration below.
 
