@@ -69,7 +69,7 @@ environment, you will need to configure authentication. You can read about
 credentials in the [GCP provider
 documentation](https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/provider_reference#authentication).
 
-## Build Infrastructure
+## Build infrastructure
 
 The set of files used to describe infrastructure in Terraform is known as a
 Terraform _configuration_. Next, you will write your first configuration to create a network.
