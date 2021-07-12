@@ -4,7 +4,7 @@
 
 ### About this Tutorial
 
-This tutorial will help you learn the fundamentals of Terraform and how
+This tutorial will introduce the fundamentals of Terraform and how
 to provision infrastructure on Google Cloud Platform (GCP).
 
 In these tutorials, you will use Terraform to
