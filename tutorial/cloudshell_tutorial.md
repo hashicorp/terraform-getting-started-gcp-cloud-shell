@@ -8,7 +8,7 @@ This tutorial will introduce the fundamentals of Terraform and how
 to provision infrastructure on Google Cloud Platform (GCP).
 
 In this tutorial, you will use Terraform to
-provision, update, and destroy a simple set of infrastructure using the sample
+provision, update, and destroy infrastructure using the sample
 configuration provided. The sample configuration provisions a network and a
 Linux virtual machine. You will also learn about remote backends, input and
 output variables, and how to configure resource dependencies. These are the
