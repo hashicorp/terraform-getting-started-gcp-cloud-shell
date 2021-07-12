@@ -128,8 +128,8 @@ resource manager](https://console.cloud.google.com/cloud-resource-manager)
 
 ### Terraform Block
 
-The `terraform {}` block contains Terraform settings, including the required
-providers Terraform will use to provision your infrastructure. For each
+The `terraform {}` block contains Terraform settings, including the
+providers needed to provision your infrastructure. For each
 provider, the `source` attribute defines an optional hostname, a namespace, and
 the provider type. Terraform installs providers from the [Terraform
 Registry](https://registry.terraform.io/) by default. In this example
