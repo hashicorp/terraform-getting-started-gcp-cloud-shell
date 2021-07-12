@@ -33,7 +33,7 @@ HashiCorp Learn](https://learn.hashicorp.com/collections/terraform/gcp-get-start
 ### Terraform
 
 Terraform is already installed in your Cloud Shell environment. You can verify
-this with the `terraform version`.
+this by running `terraform version`.
 
 ```bash
 terraform version
