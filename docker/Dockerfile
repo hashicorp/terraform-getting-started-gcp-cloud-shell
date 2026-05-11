@@ -1,3 +1,5 @@
+# Copyright IBM Corp. 2019, 2026
+
 # Only needed if we want the latest and greatest terraform. Otherwise, just use:
 #
 # https://console.cloud.google.com/cloudshell/open?cloudshell_image=gcr.io/graphite-cloud-shell-images/terraform:0.12
