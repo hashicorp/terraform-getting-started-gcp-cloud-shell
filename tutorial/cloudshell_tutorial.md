@@ -511,7 +511,7 @@ resource "google_compute_instance" "vm_instance" {
 
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-9"
+      image = "debian-cloud/debian-13"
     }
   }
 
@@ -598,7 +598,7 @@ Terraform will perform the following actions:
           + source                     = (known after apply)
 
           + initialize_params {
-              + image  = "debian-cloud/debian-9"
+              + image  = "debian-cloud/debian-13"
               + labels = (known after apply)
               + size   = (known after apply)
               + type   = (known after apply)
@@ -747,13 +747,13 @@ configuration file to change the image parameter as follows.
 ```diff hideClipboard
    boot_disk {
      initialize_params {
--      image = "debian-cloud/debian-9"
+-      image = "debian-cloud/debian-13"
 +      image = "cos-cloud/cos-stable"
      }
    }
 ```
 
-This modification changes the boot disk from a Debian 9 image to Google's
+This modification changes the boot disk from a Debian 13 image to Google's
 Container-Optimized OS.
 
 Now run `terraform apply` again. Terraform will replace the instance because
@@ -811,7 +811,7 @@ Terraform will perform the following actions:
             # (2 unchanged attributes hidden)
 
           ~ initialize_params {
-              ~ image  = "https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/debian-9-stretch-v20210609" -> "cos-cloud/cos-stable" # forces replacement
+              ~ image  = "https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/debian-13-trixie-v20261116" -> "cos-cloud/cos-stable" # forces replacement
               ~ labels = {} -> (known after apply)
               ~ size   = 10 -> (known after apply)
               ~ type   = "pd-standard" -> (known after apply)
